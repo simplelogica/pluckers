@@ -1,3 +1,5 @@
+require_relative 'features/simple_attributes'
+
 module Pluckers
 
   ##
@@ -20,7 +22,12 @@ module Pluckers
     # pluck a particular object we could pass `BlogPost.where(id: post.id )`
     # so we have an ActiveRecord relation.
     #
-    # The options hash allows us to send a lot of configuration:
+    # The options hash allows us to send a lot of configuration that will be
+    # used by all the features and subclasses to decorate the very basic
+    # behaviour.
+    #
+    # Currently, the options supported by the features included in this base
+    # plucker are:
     #
     #  * attributes: Names of attributes of the objects to be plucked. This
     #    attributes should be the names of the columns in the database.
@@ -30,8 +37,7 @@ module Pluckers
     def initialize records, options = {}
       @records = records
       @options = options
-      @options[:attributes] = default_attributes unless @options[:attributes]
-      initialize_attributes(@options[:attributes])
+      @features = @options.delete(:features)
     end
 
     ##
@@ -40,10 +46,30 @@ module Pluckers
     def pluck
       return [] if @records.blank?
 
-      initialize_query
+      configure_query
 
-      # First, we check wich attributes we should pluck
-      pluck_simple_attributes
+      build_results
+
+      # And return the results
+      @results
+    end
+
+    ##
+    # In this base implementation we just reset all the query information.
+    # Features and subclasses must redefine this method if they are interested
+    # in adding some behaviour.
+    def configure_query
+      @query_to_pluck = @records
+      @attributes_to_pluck = []
+      @results = []
+    end
+
+    ##
+    # In this base implementation we perform the real pluck execution.
+    #
+    # The method collects all the attributes and columns to pluck and add it
+    # to the results array.
+    def build_results
 
       # Now we uinq the attributes
       @attributes_to_pluck.uniq!{|f| f[:name] }
@@ -69,49 +95,10 @@ module Pluckers
         # Now we store it in the results array
         @results << attributes_to_return
       end
-
-      # And return the results
-      @results
     end
 
-    ##
-    # This private method initializes the attributes to be retrieved. Right now it
-    # only checks that the requested attributes exists in this model, but in
-    # the future could be used for more features, such as translated attributes or
-    # alias.
-    private def initialize_attributes attributes
-      plucker_attributes = attributes.map(&:to_sym)
-
-      klass_attributes = @records.attribute_names.map(&:to_sym)
-
-      # Validate that all attributes exists in the model
-      if (missing_attributes = plucker_attributes - klass_attributes).any?
-        raise ArgumentError.new("Plucker attributes '#{missing_attributes.to_sentence}', are missing in #{@records.klass}")
-      end
-
-      # Split attributes in normal attributes and translated
-      @simple_attributes = plucker_attributes & klass_attributes
-    end
-
-    ##
-    # This private method returns the default attributes that must be retrieved
-    private def default_attributes records = @records
-      records.attribute_names
-    end
-
-    ##
-    # We reset all the query information, including the results
-    private def initialize_query
-      @query_to_pluck = @records
-      @attributes_to_pluck = []
-      @results = []
-    end
-
-    ##
-    # In this method we create the array of attributes to pluck
-    private def pluck_simple_attributes
-      @attributes_to_pluck += @simple_attributes.map {|f| { name: f, sql: f }}
-    end
+    # Now we add all the base features
+    prepend Features::SimpleAttributes
 
   end
 end
