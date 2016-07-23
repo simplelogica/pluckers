@@ -3,3 +3,4 @@ require 'pluckers'
 require 'dummy/dummy'
 
 require 'minitest/autorun'
+require 'minitest/matchers_vaccine'
