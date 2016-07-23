@@ -1,4 +1,5 @@
 require_relative 'features/simple_attributes'
+require_relative 'features/belongs_to_reflections'
 
 module Pluckers
 
@@ -100,6 +101,7 @@ module Pluckers
 
     # Now we add all the base features
     prepend Features::SimpleAttributes
+    prepend Features::BelongsToReflections
 
   end
 end
