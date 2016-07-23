@@ -1,4 +1,5 @@
 require_relative 'features/simple_attributes'
+require_relative 'features/belongs_to_reflections'
 
 module Pluckers
 
@@ -51,7 +52,7 @@ module Pluckers
       build_results
 
       # And return the results
-      @results
+      @results.values
     end
 
     ##
@@ -60,8 +61,9 @@ module Pluckers
     # in adding some behaviour.
     def configure_query
       @query_to_pluck = @records
-      @attributes_to_pluck = []
-      @results = []
+      @attributes_to_pluck = [{ name: @query_to_pluck.primary_key.to_sym, sql: @query_to_pluck.primary_key }]
+      @results = {}
+      @klass_reflections = @query_to_pluck.reflections.with_indifferent_access
     end
 
     ##
@@ -92,13 +94,14 @@ module Pluckers
         # :title=>"Test title 1", :text=>"Test text 1"}
         attributes_to_return = Hash[names_to_pluck.zip(record)]
 
-        # Now we store it in the results array
-        @results << attributes_to_return
+        # Now we store it in the results hash
+        @results[attributes_to_return[:id]] = attributes_to_return
       end
     end
 
     # Now we add all the base features
     prepend Features::SimpleAttributes
+    prepend Features::BelongsToReflections
 
   end
 end

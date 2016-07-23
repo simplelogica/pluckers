@@ -30,7 +30,8 @@ class SimpleAttributesTest < Minitest::Test
       {
         id: p.id,
         title: p.title,
-        text: p.text
+        text: p.text,
+        author_id: nil
       }
     }
   end
@@ -40,6 +41,7 @@ class SimpleAttributesTest < Minitest::Test
 
     must pluck Proc.new {|p|
       {
+        id: p.id,
         text: p.text
       }
     }
