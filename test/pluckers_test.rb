@@ -5,7 +5,7 @@ class PluckersTest < Minitest::Test
     refute_nil ::Pluckers::VERSION
   end
 
-  def test_it_does_something_useful
-    assert false
+  def test_dummy_models_are_loaded
+    assert_nil BlogPost.first
   end
 end
