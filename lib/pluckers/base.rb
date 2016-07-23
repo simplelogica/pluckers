@@ -33,6 +33,21 @@ module Pluckers
     #  * attributes: Names of attributes of the objects to be plucked. This
     #    attributes should be the names of the columns in the database.
     #
+    #  * reflections: A hash of the reflections we will pluck recursively. The
+    #    key of this hash will be the name of the reflection and the value is
+    #    another hash of options.
+    #
+    #    - scope: You can limit the scope of the objects plucked. E.g, you
+    #      could use Author.active instead of Author.all. Notice that .all is
+    #      the default.
+    #
+    #    - plucker: You can use a custom plucker instead of Pluckers::Base in
+    #      case you want any specific logic. Pluckers::Base is the default one.
+    #
+    #    - Any other option will be passed to the plucker, so you can send any
+    #      other regular option such as fields, custom ones or even more
+    #      reflections. Recursivity FTW!!
+    #
     # The options hash can be used by subclasses to decorate all this
     # behaviour and send params inside the plucker.
     def initialize records, options = {}
