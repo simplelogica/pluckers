@@ -4,9 +4,10 @@ ActiveRecord::Schema.define do
   create_table :blog_posts, :force => true do |t|
     t.string :title
     t.text :text
+    t.integer :author_id
   end
 end
 
 class BlogPost < ActiveRecord::Base
-
+  belongs_to :author
 end
