@@ -7,21 +7,19 @@
 module PluckMatcher
 
   ##
-  # The method call inside any minitest test: must(pluck(records, block to replace the pluck)).
+  # The method call inside any minitest test: must(pluck(block to replace the pluck)).
   #
-  # The first argument is the AR scope that stores all the objects that will be
-  # fetched in order to simulate the pluck.
+  # The argument is a proc that will be executed for every fetched record and
+  # creates the same hash that should be plucked with the pluckers.
   #
-  # The second argument is a proc that will be executed for every fetched
-  # record and creates the same hash that should be plucked with the pluckers.
-  def pluck records, record_block
-    Matcher.new records, record_block
+  # The records will be read from the plucker itself.
+  def pluck record_block
+    Matcher.new record_block
   end
 
   class Matcher
 
-    def initialize records, record_block
-      @records = records
+    def initialize record_block
       @record_block = record_block
     end
 
@@ -31,7 +29,7 @@ module PluckMatcher
 
     def matches? plucker
       @plucked = plucker.pluck
-      @built = @records.map{|r| @record_block.call(r)}.to_a
+      @built = plucker.records.map{|r| @record_block.call(r)}.to_a
       @plucked == @built
     end
 

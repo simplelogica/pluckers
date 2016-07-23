@@ -8,6 +8,11 @@ module Pluckers
   class Base
 
     ##
+    # In this attribute we store the ActiveRecord Relation we use to fetch
+    # information from the database
+    attr_reader :records
+
+    ##
     # In the initialize method we recive all the options for the plucker.
     #
     # First, we receive an ActiveRecord Relation. It can be any ActiveRecord
