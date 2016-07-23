@@ -40,6 +40,7 @@ class SimpleAttributesTest < Minitest::Test
 
     must pluck Proc.new {|p|
       {
+        id: p.id,
         text: p.text
       }
     }
