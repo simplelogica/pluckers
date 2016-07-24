@@ -10,4 +10,5 @@ end
 class Author < ActiveRecord::Base
   has_many :blog_posts
   has_many :references, through: :blog_posts
+  has_one :user
 end
