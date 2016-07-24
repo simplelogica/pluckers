@@ -112,4 +112,61 @@ class HasAndBelongsToManyTest < Minitest::Test
     }
 
   end
+
+  def test_it_renames_the_reflection
+    @subject = Pluckers::Base.new(BlogPost.all, reflections: { categories: { attributes: [:title ]} }, renames: { categories: :tags })
+
+    must pluck Proc.new {|p|
+      {
+        id: p.id,
+        title: p.title,
+        text: p.text,
+        author_id: p.author_id,
+        category_ids: p.category_ids,
+        tags: p.categories.map {|c|
+          {
+            id: c.id,
+            title: c.title
+          }
+        }
+      }
+    }
+
+  end
+
+  def test_it_renames_the_ids
+    @subject = Pluckers::Base.new(BlogPost.all, reflections: { categories: { only_ids: true } }, renames: { category_ids: :c_ids })
+
+    must pluck Proc.new {|p|
+      {
+        id: p.id,
+        title: p.title,
+        text: p.text,
+        author_id: p.author_id,
+        c_ids: p.category_ids
+      }
+    }
+
+  end
+
+  def test_it_renames_both
+    @subject = Pluckers::Base.new(BlogPost.all, reflections: { categories: { attributes: [:title ]} }, renames: { categories: :tags, category_ids: :c_ids })
+
+    must pluck Proc.new {|p|
+      {
+        id: p.id,
+        title: p.title,
+        text: p.text,
+        author_id: p.author_id,
+        c_ids: p.category_ids,
+        tags: p.categories.map {|c|
+          {
+            id: c.id,
+            title: c.title
+          }
+        }
+      }
+    }
+
+  end
 end

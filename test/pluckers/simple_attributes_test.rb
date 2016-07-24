@@ -47,4 +47,16 @@ class SimpleAttributesTest < Minitest::Test
     }
 
   end
+
+    def test_it_renames_simple_attributes
+    @subject = Pluckers::Base.new(BlogPost.all, attributes: [:text], renames: { text: :body })
+
+    must pluck Proc.new {|p|
+      {
+        id: p.id,
+        body: p.text
+      }
+    }
+
+  end
 end

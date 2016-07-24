@@ -98,4 +98,23 @@ class HasOneThroughTest < Minitest::Test
     }
 
   end
+
+  def test_it_renames_the_reflection
+    @subject = Pluckers::Base.new(BlogPost.all, reflections: { user: { attributes: [:email ]} }, renames: { user: :account})
+
+    must pluck Proc.new {|p|
+      {
+        id: p.id,
+        title: p.title,
+        text: p.text,
+        author_id: p.author_id,
+        account: p.user.nil? ? nil : {
+          id: p.user.id,
+          email: p.user.email,
+          author_id: p.user.author_id
+        }
+      }
+    }
+
+  end
 end

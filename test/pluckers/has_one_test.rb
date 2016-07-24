@@ -76,4 +76,23 @@ class HasOneTest < Minitest::Test
     }
 
   end
+
+
+  def test_it_renames_the_reflections
+    @subject = Pluckers::Base.new(Author.all, reflections: { user: { attributes: [:email ]} }, renames: { user: :account })
+
+    must pluck Proc.new {|a|
+      {
+        id: a.id,
+        name: a.name,
+        email: a.email,
+        account: a.user.nil? ? nil : {
+          id: a.user.id,
+          email: a.user.email,
+          author_id: a.id
+        }
+      }
+    }
+
+  end
 end
