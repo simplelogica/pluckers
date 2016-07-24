@@ -3,6 +3,7 @@ require_relative 'features/belongs_to_reflections'
 require_relative 'features/has_many_reflections'
 require_relative 'features/has_many_through_reflections'
 require_relative 'features/has_and_belongs_to_many_reflections'
+require_relative 'features/has_one_reflections'
 
 module Pluckers
 
@@ -134,6 +135,7 @@ module Pluckers
     prepend Features::HasManyReflections
     prepend Features::HasManyThroughReflections
     prepend Features::HasAndBelongsToManyReflections
+    prepend Features::HasOneReflections
 
   end
 end
