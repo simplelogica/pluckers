@@ -9,7 +9,7 @@ module Pluckers
   module Features
 
     ##
-    # This module implements plucking belongs_to relationships in a recursive
+    # This module implements plucking has_one relationships in a recursive
     # way.
     #
     # The options used in this feature are:
@@ -29,11 +29,11 @@ module Pluckers
     #      other regular option such as attributes, custom ones or even more
     #      reflections. Recursivity FTW!!
     #
-    module BelongsToReflections
+    module HasOneReflections
 
 
       ##
-      # Here we obtain the belongs_to reflections to include in the pluck
+      # Here we obtain the has_one reflections to include in the pluck
       # operation and also include the relation foreign key in the attributes to
       # pluck for this model.
       def configure_query
@@ -43,27 +43,17 @@ module Pluckers
 
         return if pluck_reflections.blank?
 
-        @belongs_to_reflections = { }
+        @has_one_reflections = { }
 
         # We iterate through the class reflections passed as options
         @klass_reflections.slice(*pluck_reflections.keys).
         # And select those that are BelongsTo
-          select{|_, r| r.is_a?(ActiveRecord::Reflection::BelongsToReflection)}.
-        # And store them in the belongs_to_reflection hash that will be used later
+          select{|_, r| r.is_a?(ActiveRecord::Reflection::HasOneReflection)}.
+        # And store them in the has_one_reflection hash that will be used later
           each do |name, reflection|
             name = name.to_sym
-            @belongs_to_reflections[name] = pluck_reflections[name]
+            @has_one_reflections[name] = pluck_reflections[name]
           end
-
-        # First thing we do is to include the foreign key in the attributes to
-        # pluck array, so the base plucker plucks them
-        @belongs_to_reflections.each do |name, _|
-          foreign_key_name = @klass_reflections[name].foreign_key
-          @attributes_to_pluck << {
-            name: foreign_key_name.to_sym,
-            sql: foreign_key_name
-          }
-        end
 
       end
 
@@ -76,9 +66,9 @@ module Pluckers
       def build_results
         super
 
-        return if @belongs_to_reflections.blank?
+        return if @has_one_reflections.blank?
         # For each reflection
-        @belongs_to_reflections.each do |name, reflection|
+        @has_one_reflections.each do |name, reflection|
           # As an example we will imagine that we are plucking BlogPosts and
           # this relation is the Author
 
@@ -89,6 +79,10 @@ module Pluckers
           scope = reflection[:scope] || klass_reflection.klass.all
           plucker = reflection[:plucker] || Pluckers::Base
 
+          # If there are attributes configured to be plucked we add the foreign
+          # key as we will need it to relate the records
+          reflection[:attributes] |= [klass_reflection.foreign_key.to_sym] if reflection[:attributes]
+
           # And now we create the plucker. Notice that we add a where to the
           # scope, so we filter the records to pluck as we only get those with
           # an id in the set of the foreign keys of the records already
@@ -97,7 +91,7 @@ module Pluckers
           # In our Example we would be doing something like
           # Author.all.where(id: author_ids)
           reflection_plucker = plucker.new scope.where(
-              id: @results.map{|_, r| r[klass_reflection.foreign_key.to_sym] }.compact
+              klass_reflection.foreign_key => @results.map{|_, r| r[klass_reflection.active_record_primary_key.to_sym] }
             ),
             reflection
 
@@ -112,7 +106,7 @@ module Pluckers
             # (BlogPost) that are related (post.author_id == author.id) and
             # insert them in the relationship attributes
             @results.each do |_,result|
-              if result[klass_reflection.foreign_key.to_sym] == r[:id]
+              if result[klass_reflection.active_record_primary_key.to_sym] == r[klass_reflection.foreign_key.to_sym]
                 result[name] = r
               end
             end

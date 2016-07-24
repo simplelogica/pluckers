@@ -1,3 +1,6 @@
 require_relative 'database.rb'
 require_relative 'models/author.rb'
 require_relative 'models/blog_post.rb'
+require_relative 'models/reference.rb'
+require_relative 'models/category.rb'
+require_relative 'models/user.rb'

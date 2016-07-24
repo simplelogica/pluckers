@@ -9,7 +9,7 @@ module Pluckers
   module Features
 
     ##
-    # This module implements plucking has_many relationships in a recursive
+    # This module implements plucking has_and_belongs_to_many relationships in a recursive
     # way.
     #
     # The options used in this feature are:
@@ -25,15 +25,11 @@ module Pluckers
     #    - plucker: You can use a custom plucker instead of Pluckers::Base in
     #      case you want any specific logic. Pluckers::Base is the default one.
     #
-    #    - only_ids: We can get the _ids array instead of an array with hashes
-    #      if we pass this option as true. If we do any fields or plucker
-    #      option will be ignored.
-    #
     #    - Any other option will be passed to the plucker, so you can send any
     #      other regular option such as attributes, custom ones or even more
     #      reflections. Recursivity FTW!!
     #
-    module HasManyReflections
+    module HasAndBelongsToManyReflections
 
 
       ##
@@ -47,16 +43,16 @@ module Pluckers
 
         return if pluck_reflections.blank?
 
-        @has_many_reflections = { }
+        @has_and_belongs_to_many_reflections = { }
 
         # We iterate through the class reflections passed as options
         @klass_reflections.slice(*pluck_reflections.keys).
         # And select those that are HasMany
-          select{|_, r| r.is_a?(ActiveRecord::Reflection::HasManyReflection)}.
+          select{|_, r| r.is_a?(ActiveRecord::Reflection::HasAndBelongsToManyReflection)}.
         # And store them in the has_many_reflection hash that will be used later
           each do |name, reflection|
             name = name.to_sym
-            @has_many_reflections[name] = pluck_reflections[name]
+            @has_and_belongs_to_many_reflections[name] = pluck_reflections[name]
           end
 
       end
@@ -70,10 +66,10 @@ module Pluckers
       def build_results
         super
 
-        return if @has_many_reflections.blank?
+        return if @has_and_belongs_to_many_reflections.blank?
 
-        build_complete_reflections
-        build_only_ids_reflections
+        build_only_ids_has_and_belongs_to_many_reflections
+        build_complete_has_and_belongs_to_many_reflections
 
       end
 
@@ -82,36 +78,37 @@ module Pluckers
       #
       # It searches reflections that has not the :only_ids option enabled and
       # then creates pluckers for them.
-      private def build_complete_reflections
+      private def build_complete_has_and_belongs_to_many_reflections
 
-        @has_many_reflections.reject {|_, reflection| reflection[:only_ids] }.each do |name, reflection|
+        @has_and_belongs_to_many_reflections.reject {|_, reflection| reflection[:only_ids] }.each do |name, reflection|
           # As an example we will imagine that we are plucking Authors and
           # this relation is the :posts
 
           # We get the meta information about the reflection
           klass_reflection = @klass_reflections[name]
 
-
           # initialize some options such as the plucker or the scope of the pluck
           scope = reflection[:scope] || klass_reflection.klass.all
           plucker = reflection[:plucker] || Pluckers::Base
 
-          # If there are attributes configured to be plucked we add the foreign
-          # key as we will need it to relate the records
-          reflection[:attributes] |= [klass_reflection.foreign_key.to_sym] if reflection[:attributes]
+          # We will use the _ids already fetched to check which records we should pluck
+          ids_reflection_name = "#{name.to_s.singularize}_ids".to_sym
+
+          ids_to_query = @results.map do |_, result|
+            result[ids_reflection_name]
+          end
+
+          ids_to_query = ids_to_query.flatten
+
 
 
           # And now we create the plucker. Notice that we add a where to the
           # scope, so we filter the records to pluck as we only get those with
-          # an id in the set of the foreign keys of the records already
-          # plucked by the base plucker
+          # an id in the set of the _ids arrays already plucked
           #
           # In our Example we would be doing something like
-          # BlogPost.all.where(author_id: author_ids)
-          reflection_plucker = plucker.new scope.where(
-              klass_reflection.foreign_key => @results.map{|_, r| r[klass_reflection.active_record_primary_key.to_sym] }
-            ),
-            reflection
+          # Category.all.where(id: category_ids)
+          reflection_plucker = plucker.new scope.where(id: ids_to_query), reflection
 
           # We initialize so we return an empty array if there are no record
           # related
@@ -119,15 +116,20 @@ module Pluckers
             result[name] ||= []
           end
 
+
           reflection_plucker.pluck.each do |r|
             @results.each do |_,result|
-              # For each related result (Author) we search those records
-              # (BlogPost) that are related (author.id == post.author_id) and
-              # insert them in the relationship attributes
-              if result[klass_reflection.active_record_primary_key.to_sym] == r[klass_reflection.foreign_key.to_sym]
+              # For each related result (category) we search those records
+              # (BlogPost) that include the category id in its _ids array
+              if result[ids_reflection_name].include? r[:id].to_i
                 result[name] << r
               end
             end
+          end
+
+          # And now we get rid of duplicates
+          @results.each do |_,result|
+            result[name].uniq!
           end
 
         end
@@ -136,49 +138,53 @@ module Pluckers
       ##
       # This method build the ids for the records instead of creating the hashes.
       #
-      # It searches reflections that has the :only_ids option enabled and then
-      # creates pluckers for them.
-      private def build_only_ids_reflections
+      # Unlike the has_many relationships, we don't search reflections that
+      # has the :only_ids option enabled as we will need these ids also for
+      # the other relationships.
+      private def build_only_ids_has_and_belongs_to_many_reflections
 
-        @has_many_reflections.select {|_, reflection| reflection[:only_ids] }.each do |name, reflection|
-          # As an example we will imagine that we are plucking Authors and
-          # this relation is the :posts
+        @has_and_belongs_to_many_reflections.each do |name, reflection|
+          # As an example we will imagine that we are plucking BlogPosts and
+          # this relation is the :categories one
 
           # We get the meta information about the reflection
           klass_reflection = @klass_reflections[name]
 
-          # We can send an scope option for filtering the related records
-          scope = reflection[:scope] || klass_reflection.klass.all
+          # First,  we get the the join table
+          join_table = Arel::Table.new(klass_reflection.join_table)
 
-          # We override the attributes as we only get the required ones for
-          # relating the records
-          reflection[:attributes] = [klass_reflection.foreign_key.to_sym, klass_reflection.active_record_primary_key.to_sym]
+          # And now, the foreign_keys.
+          # In our example with BlogPost and Category they would be:
+          # model_foreign_key = blog_post_id
+          # related_model_foreign_key = category_id
+          model_foreign_key = klass_reflection.foreign_key
+          related_model_foreign_key = klass_reflection.association_foreign_key
 
-          # And now, create the plucker, filtering the records so we only get
-          # the related ones
-          reflection_plucker = Pluckers::Base.new scope.where(
-              klass_reflection.foreign_key => @results.map{|_, r| r[klass_reflection.active_record_primary_key.to_sym] }
-            ),
-            reflection
+          # Now we query the join table so we get the two ids
+          ids_query = join_table.where(
+              join_table[model_foreign_key].in(@results.map{|_, r| r[:id] })
+            ).project(
+              join_table[related_model_foreign_key],
+              join_table[model_foreign_key]
+            )
 
-          # Now we create the _ids attribute for each result
+          join_results = ActiveRecord::Base.connection.execute(ids_query.to_sql)
+
           ids_reflection_name = "#{name.to_s.singularize}_ids".to_sym
 
+          # Next, we initialize the _ids array for each result
           @results.each do |_, result|
             result[ids_reflection_name] ||= []
           end
 
+          # And for each result we fill the results
+          join_results.each do |r|
+            @results[r[model_foreign_key].to_i][ids_reflection_name] << r[related_model_foreign_key].to_i
+          end
 
-          reflection_plucker.pluck.each do |r|
-            @results.
-              each do |_,result|
-                # For each related result (Author) we search those records
-                # (BlogPost) that are related (author.id == post.author_id) and
-                # insert the id in the _ids array
-                if result[klass_reflection.active_record_primary_key.to_sym] == r[klass_reflection.foreign_key.to_sym]
-                  result[ids_reflection_name] << r[klass_reflection.active_record_primary_key.to_sym]
-                end
-              end
+          # And eliminate duplicates
+          @results.each do |_,result|
+            result[ids_reflection_name].uniq!
           end
 
         end

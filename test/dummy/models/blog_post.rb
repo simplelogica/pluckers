@@ -10,4 +10,7 @@ end
 
 class BlogPost < ActiveRecord::Base
   belongs_to :author
+  has_one :user, through: :author
+  has_many :references
+  has_and_belongs_to_many :categories
 end
