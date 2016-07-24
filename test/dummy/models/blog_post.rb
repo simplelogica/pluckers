@@ -10,4 +10,5 @@ end
 
 class BlogPost < ActiveRecord::Base
   belongs_to :author
+  has_many :references
 end
