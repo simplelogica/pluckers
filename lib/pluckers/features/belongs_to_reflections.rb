@@ -26,7 +26,7 @@ module Pluckers
     #      case you want any specific logic. Pluckers::Base is the default one.
     #
     #    - Any other option will be passed to the plucker, so you can send any
-    #      other regular option such as fields, custom ones or even more
+    #      other regular option such as attributes, custom ones or even more
     #      reflections. Recursivity FTW!!
     #
     module BelongsToReflections
@@ -41,14 +41,7 @@ module Pluckers
 
         pluck_reflections = @options[:reflections] || {}
 
-
         return if pluck_reflections.blank?
-
-        # Validate that all relations exists in the model
-        if (missing_reflections = pluck_reflections.symbolize_keys.keys - @klass_reflections.symbolize_keys.keys).any?
-          raise ArgumentError.new("Plucker reflections '#{missing_reflections.to_sentence}', are missing in #{@records.klass}")
-        end
-
 
         @belongs_to_reflections = { }
 
@@ -62,7 +55,7 @@ module Pluckers
             @belongs_to_reflections[name] = pluck_reflections[name]
           end
 
-        # First thing we do is to include the foreign key in the fields to
+        # First thing we do is to include the foreign key in the attributes to
         # pluck array, so the base plucker plucks them
         @belongs_to_reflections.each do |name, _|
           foreign_key_name = @klass_reflections[name].foreign_key
@@ -101,7 +94,8 @@ module Pluckers
           # an id in the set of the foreign keys of the records already
           # plucked by the base plucker
           #
-          # In our Example we sould be doing something like Author.all.where(id: author_ids)
+          # In our Example we would be doing something like
+          # Author.all.where(id: author_ids)
           reflection_plucker = plucker.new scope.where(
               id: @results.map{|_, r| r[klass_reflection.foreign_key.to_sym] }.compact
             ),

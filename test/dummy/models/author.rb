@@ -8,5 +8,5 @@ ActiveRecord::Schema.define do
 end
 
 class Author < ActiveRecord::Base
-  has_many :authors
+  has_many :blog_posts
 end

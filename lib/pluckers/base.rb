@@ -1,5 +1,6 @@
 require_relative 'features/simple_attributes'
 require_relative 'features/belongs_to_reflections'
+require_relative 'features/has_many_reflections'
 
 module Pluckers
 
@@ -44,6 +45,10 @@ module Pluckers
     #    - plucker: You can use a custom plucker instead of Pluckers::Base in
     #      case you want any specific logic. Pluckers::Base is the default one.
     #
+    #    - only_ids: In has_many reflections we can get the _ids array instead
+    #      of an array with hashes if we pass this option as true. If we do any
+    #      fields or plucker option will be ignored.
+    #
     #    - Any other option will be passed to the plucker, so you can send any
     #      other regular option such as fields, custom ones or even more
     #      reflections. Recursivity FTW!!
@@ -79,6 +84,13 @@ module Pluckers
       @attributes_to_pluck = [{ name: @query_to_pluck.primary_key.to_sym, sql: @query_to_pluck.primary_key }]
       @results = {}
       @klass_reflections = @query_to_pluck.reflections.with_indifferent_access
+
+      pluck_reflections = @options[:reflections] || {}
+
+      # Validate that all relations exists in the model
+      if (missing_reflections = pluck_reflections.symbolize_keys.keys - @klass_reflections.symbolize_keys.keys).any?
+        raise ArgumentError.new("Plucker reflections '#{missing_reflections.to_sentence}', are missing in #{@records.klass}")
+      end
     end
 
     ##
@@ -117,6 +129,7 @@ module Pluckers
     # Now we add all the base features
     prepend Features::SimpleAttributes
     prepend Features::BelongsToReflections
+    prepend Features::HasManyReflections
 
   end
 end
