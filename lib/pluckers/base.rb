@@ -79,6 +79,13 @@ module Pluckers
       @attributes_to_pluck = [{ name: @query_to_pluck.primary_key.to_sym, sql: @query_to_pluck.primary_key }]
       @results = {}
       @klass_reflections = @query_to_pluck.reflections.with_indifferent_access
+
+      pluck_reflections = @options[:reflections] || {}
+
+      # Validate that all relations exists in the model
+      if (missing_reflections = pluck_reflections.symbolize_keys.keys - @klass_reflections.symbolize_keys.keys).any?
+        raise ArgumentError.new("Plucker reflections '#{missing_reflections.to_sentence}', are missing in #{@records.klass}")
+      end
     end
 
     ##
