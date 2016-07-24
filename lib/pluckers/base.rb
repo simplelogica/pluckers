@@ -6,6 +6,7 @@ require_relative 'features/has_and_belongs_to_many_reflections'
 require_relative 'features/has_one_reflections'
 require_relative 'features/has_one_through_reflections'
 require_relative 'features/renaming'
+require_relative 'features/globalize'
 
 module Pluckers
 
@@ -132,6 +133,7 @@ module Pluckers
     end
 
     # Now we add all the base features
+    prepend Features::Globalize
     prepend Features::SimpleAttributes
     prepend Features::BelongsToReflections
     prepend Features::HasManyReflections
