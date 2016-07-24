@@ -9,8 +9,8 @@ module Pluckers
   module Features
 
     ##
-    # This module implements fetching simple attributes (columns) from the
-    # database through the AR's pluck method.
+    # This module implements plucking has_many relationships in a recursive
+    # way.
     #
     # The options used in this feature are:
     #
@@ -51,7 +51,7 @@ module Pluckers
 
         # We iterate through the class reflections passed as options
         @klass_reflections.slice(*pluck_reflections.keys).
-        # And select those that are BelongsTo
+        # And select those that are HasMany
           select{|_, r| r.is_a?(ActiveRecord::Reflection::HasManyReflection)}.
         # And store them in the has_many_reflection hash that will be used later
           each do |name, reflection|
@@ -112,7 +112,6 @@ module Pluckers
               klass_reflection.foreign_key => @results.map{|_, r| r[klass_reflection.active_record_primary_key.to_sym] }
             ),
             reflection
-
 
           # We initialize so we return an empty array if there are no record
           # related

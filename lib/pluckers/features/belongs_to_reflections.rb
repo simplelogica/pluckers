@@ -9,8 +9,8 @@ module Pluckers
   module Features
 
     ##
-    # This module implements fetching simple attributes (columns) from the
-    # database through the AR's pluck method.
+    # This module implements plucking belongs_to relationships in a recursive
+    # way.
     #
     # The options used in this feature are:
     #
