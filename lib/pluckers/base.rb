@@ -1,6 +1,7 @@
 require_relative 'features/simple_attributes'
 require_relative 'features/belongs_to_reflections'
 require_relative 'features/has_many_reflections'
+require_relative 'features/has_many_through_reflections'
 
 module Pluckers
 
@@ -130,6 +131,7 @@ module Pluckers
     prepend Features::SimpleAttributes
     prepend Features::BelongsToReflections
     prepend Features::HasManyReflections
+    prepend Features::HasManyThroughReflections
 
   end
 end
