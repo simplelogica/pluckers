@@ -116,4 +116,26 @@ class HasManyThroughTest < Minitest::Test
     }
 
   end
+
+  def test_it_renames_the_reflection
+    @subject = Pluckers::Base.new(Author.all, reflections: { references: { attributes: [:title] } }, renames: { references: :bibliography})
+
+    must pluck Proc.new {|a|
+      {
+        id: a.id,
+        name: a.name,
+        email: a.email,
+        bibliography: a.blog_posts.map {|p|
+          p.references.map {|r|
+            {
+              id: r.id,
+              title: r.title,
+              blog_post_id: p.id
+            }
+          }
+        }.flatten
+      }
+    }
+
+  end
 end

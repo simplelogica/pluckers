@@ -98,4 +98,41 @@ class HasManyTest < Minitest::Test
     }
 
   end
+
+  def test_it_renames_the_reflections
+    @subject = Pluckers::Base.new(Author.all, reflections: { blog_posts: { attributes: [:title ]} }, renames: { blog_posts: :posts })
+
+    must pluck Proc.new {|a|
+      {
+        id: a.id,
+        name: a.name,
+        email: a.email,
+        posts: a.blog_posts.map {|p|
+          {
+            id: p.id,
+            title: p.title,
+            author_id: p.author_id
+          }
+        }
+      }
+    }
+
+  end
+
+
+  def test_it_renames_the_ids
+    @subject = Pluckers::Base.new(Author.all, reflections: { blog_posts: { only_ids: true } }, renames: { blog_post_ids: :post_ids })
+
+    must pluck Proc.new {|a|
+      {
+        id: a.id,
+        name: a.name,
+        email: a.email,
+        post_ids: a.blog_post_ids
+      }
+    }
+
+  end
+
+
 end

@@ -80,4 +80,22 @@ class BelongsToTest < Minitest::Test
     }
 
   end
+
+  def test_it_renames_belongs_to_reflections
+    @subject = Pluckers::Base.new(BlogPost.all, reflections: { author: { attributes: [:name ]}}, renames: { author: :post_author } )
+
+    must pluck Proc.new {|p|
+      {
+        id: p.id,
+        title: p.title,
+        text: p.text,
+        author_id: p.author_id,
+        post_author: p.author.nil? ? nil : {
+          id: p.author.id,
+          name: p.author.name
+        }
+      }
+    }
+
+  end
 end
