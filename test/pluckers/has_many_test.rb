@@ -84,4 +84,18 @@ class HasManyTest < Minitest::Test
     }
 
   end
+
+  def test_it_plucks_only_the_ids
+    @subject = Pluckers::Base.new(Author.all, reflections: { blog_posts: { only_ids: true } })
+
+    must pluck Proc.new {|a|
+      {
+        id: a.id,
+        name: a.name,
+        email: a.email,
+        blog_post_ids: a.blog_post_ids
+      }
+    }
+
+  end
 end

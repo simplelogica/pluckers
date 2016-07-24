@@ -25,6 +25,10 @@ module Pluckers
     #    - plucker: You can use a custom plucker instead of Pluckers::Base in
     #      case you want any specific logic. Pluckers::Base is the default one.
     #
+    #    - only_ids: We can get the _ids array instead of an array with hashes
+    #      if we pass this option as true. If we do any fields or plucker
+    #      option will be ignored.
+    #
     #    - Any other option will be passed to the plucker, so you can send any
     #      other regular option such as attributes, custom ones or even more
     #      reflections. Recursivity FTW!!
@@ -69,13 +73,15 @@ module Pluckers
         return if @has_many_reflections.blank?
 
         build_complete_reflections
+        build_only_ids_reflections
+
       end
 
       ##
       # This method build the reflections completely, creating hashes for each record, etc.
       #
       # It searches reflections that has not the :only_ids option enabled and
-      # then create pluckers for them.
+      # then creates pluckers for them.
       private def build_complete_reflections
 
         @has_many_reflections.reject {|_, reflection| reflection[:only_ids] }.each do |name, reflection|
@@ -126,6 +132,58 @@ module Pluckers
           end
 
         end
+      end
+
+      ##
+      # This method build the ids for the records instead of creating the hashes.
+      #
+      # It searches reflections that has the :only_ids option enabled and then
+      # creates pluckers for them.
+      private def build_only_ids_reflections
+
+        @has_many_reflections.select {|_, reflection| reflection[:only_ids] }.each do |name, reflection|
+          # As an example we will imagine that we are plucking Authors and
+          # this relation is the :posts
+
+          # We get the meta information about the reflection
+          klass_reflection = @klass_reflections[name]
+
+          # We can send an scope option for filtering the related records
+          scope = reflection[:scope] || klass_reflection.klass.all
+
+          # We override the attributes as we only get the required ones for
+          # relating the records
+          reflection[:attributes] = [klass_reflection.foreign_key.to_sym, klass_reflection.active_record_primary_key.to_sym]
+
+          # And now, create the plucker, filtering the records so we only get
+          # the related ones
+          reflection_plucker = Pluckers::Base.new scope.where(
+              klass_reflection.foreign_key => @results.map{|_, r| r[klass_reflection.active_record_primary_key.to_sym] }
+            ),
+            reflection
+
+          # Now we create the _ids attribute for each result
+          ids_reflection_name = "#{name.to_s.singularize}_ids".to_sym
+
+          @results.each do |_, result|
+            result[ids_reflection_name] ||= []
+          end
+
+
+          reflection_plucker.pluck.each do |r|
+            @results.
+              each do |_,result|
+                # For each related result (Author) we search those records
+                # (BlogPost) that are related (author.id == post.author_id) and
+                # insert the id in the _ids array
+                if result[klass_reflection.active_record_primary_key.to_sym] == r[klass_reflection.foreign_key.to_sym]
+                  result[ids_reflection_name] << r[klass_reflection.active_record_primary_key.to_sym]
+                end
+              end
+          end
+
+        end
+
       end
 
     end

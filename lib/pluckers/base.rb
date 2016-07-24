@@ -45,6 +45,10 @@ module Pluckers
     #    - plucker: You can use a custom plucker instead of Pluckers::Base in
     #      case you want any specific logic. Pluckers::Base is the default one.
     #
+    #    - only_ids: In has_many reflections we can get the _ids array instead
+    #      of an array with hashes if we pass this option as true. If we do any
+    #      fields or plucker option will be ignored.
+    #
     #    - Any other option will be passed to the plucker, so you can send any
     #      other regular option such as fields, custom ones or even more
     #      reflections. Recursivity FTW!!
