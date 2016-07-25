@@ -38,7 +38,18 @@ module Pluckers
     # plucker are:
     #
     #  * attributes: Names of attributes of the objects to be plucked. This
-    #    attributes should be the names of the columns in the database.
+    #    attributes should be the names of the columns in the database. If we are
+    #    using Globalize these attributes can also be  the names of the translated
+    #    attributes by Globalize.
+    #
+    #  * attributes_with_locale: A hash when the key is a locale and the value
+    #    is an array of attributes to pluck. As a result we will have a series of
+    #    attributes with the name following the syntax attreibute_locale. E.g: The
+    #    option could be { es: [:name], en: [:name, :location]} and we would obtain
+    #    :name_es, :name_en and :location_en keys in the hash result
+    #
+    #  * renames: A hash of the attributes/reflections/whatever that will be
+    #    renamed. The key is the old name and the value is the new name.
     #
     #  * reflections: A hash of the reflections we will pluck recursively. The
     #    key of this hash will be the name of the reflection and the value is

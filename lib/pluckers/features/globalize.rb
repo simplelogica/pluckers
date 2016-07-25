@@ -27,7 +27,8 @@ module Pluckers
 
 
       ##
-      # Here we obtain the renames enabled for this plucker
+      # Here we include in the @attributes_to_pluck array the attribute names
+      # and SQL required for Globalize
       def configure_query
         super
 
@@ -35,19 +36,25 @@ module Pluckers
 
         if @options[:attributes]
 
+          # First we get those attributes received bia the attributes option
+          # that must be translated
           plucker_attributes = @options[:attributes].map(&:to_sym)
 
           klass_translated_attributes = @records.try(:translated_attribute_names) || []
-
           klass_translated_attributes = klass_translated_attributes.map(&:to_sym)
 
           @translated_attributes = plucker_attributes & klass_translated_attributes
 
+          # And we remove it from the attributes options, so the simple
+          # attributes feature don't receive them
           @options[:attributes] = plucker_attributes - klass_translated_attributes
 
         end
 
+        # And initialize with an empty array if we didn't receive any
         @translated_attributes ||= []
+
+        # And then get the attributes that must be returned for a specific locale
         @attributes_with_locale = @options[:attributes_with_locale] || {}
 
         unless @translated_attributes.blank? && @attributes_with_locale.blank?
