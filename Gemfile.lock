@@ -22,6 +22,9 @@ GEM
       tzinfo (~> 1.1)
     arel (6.0.3)
     builder (3.2.2)
+    globalize (5.0.1)
+      activemodel (>= 4.2.0, < 4.3)
+      activerecord (>= 4.2.0, < 4.3)
     i18n (0.7.0)
     json (1.8.3)
     minitest (5.9.0)
@@ -38,6 +41,7 @@ PLATFORMS
 
 DEPENDENCIES
   bundler (~> 1.12)
+  globalize (~> 5.0)
   minitest (~> 5.0)
   minitest-matchers_vaccine
   pluckers!

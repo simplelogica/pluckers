@@ -1,4 +1,5 @@
 require_relative 'database.rb'
+require_relative 'globalize.rb'
 require_relative 'models/author.rb'
 require_relative 'models/blog_post.rb'
 require_relative 'models/reference.rb'
