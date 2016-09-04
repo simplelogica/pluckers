@@ -63,6 +63,7 @@ class GlobalizeTest < Minitest::Test
         author_id: p.author_id,
         editor_id: p.editor_id,
         reviewed_by_id: p.reviewed_by_id,
+        main_category_title: p.main_category_title,
         translated_title_es: p.translation_for(:es).translated_title
       }
     }

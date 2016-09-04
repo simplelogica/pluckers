@@ -59,7 +59,8 @@ class HasManyTest < Minitest::Test
             text: p.text,
             author_id: p.author_id,
             editor_id: p.editor_id,
-            reviewed_by_id: p.reviewed_by_id
+            reviewed_by_id: p.reviewed_by_id,
+            main_category_title: p.main_category_title
           }
         }
       }
