@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class SimpleAttributesTest < Minitest::Test
+class GlobalizeTest < Minitest::Test
 
   include PluckMatcher
 
@@ -8,7 +8,7 @@ class SimpleAttributesTest < Minitest::Test
     @post_data = [
       {
         text: 'Test text 1',
-        translations: [
+        translations_attributes: [
           {
             locale: :es,
             translated_title: 'Test title 1 (ES)',
@@ -21,7 +21,7 @@ class SimpleAttributesTest < Minitest::Test
       },
       {
         text: 'Test text 2',
-        translations: [
+        translations_attributes: [
           {
             locale: :es,
             translated_title: 'Test title 2 (ES)',

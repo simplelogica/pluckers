@@ -24,5 +24,8 @@ class BlogPost < ActiveRecord::Base
   has_many :references
   has_and_belongs_to_many :categories
 
-  translates :translated_title if const_defined?('Globalize')
+  if const_defined?('Globalize')
+    translates :translated_title
+    accepts_nested_attributes_for :translations
+  end 
 end
