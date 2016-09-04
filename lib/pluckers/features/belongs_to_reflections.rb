@@ -89,6 +89,8 @@ module Pluckers
           scope = reflection[:scope] || klass_reflection.klass.all
           plucker = reflection[:plucker] || Pluckers::Base
 
+          reflection_primary_key = klass_reflection.active_record_primary_key.to_sym
+          reflection_foreign_key = klass_reflection.foreign_key.to_sym
           # And now we create the plucker. Notice that we add a where to the
           # scope, so we filter the records to pluck as we only get those with
           # an id in the set of the foreign keys of the records already
@@ -97,7 +99,7 @@ module Pluckers
           # In our Example we would be doing something like
           # Author.all.where(id: author_ids)
           reflection_plucker = plucker.new scope.where(
-              id: @results.map{|_, r| r[klass_reflection.foreign_key.to_sym] }.compact
+              reflection_primary_key => @results.map{|_, r| r[reflection_foreign_key] }.compact
             ),
             reflection
 
@@ -112,7 +114,7 @@ module Pluckers
             # (BlogPost) that are related (post.author_id == author.id) and
             # insert them in the relationship attributes
             @results.each do |_,result|
-              if result[klass_reflection.foreign_key.to_sym] == r[:id]
+              if result[reflection_foreign_key] == r[reflection_primary_key]
                 result[name] = r
               end
             end

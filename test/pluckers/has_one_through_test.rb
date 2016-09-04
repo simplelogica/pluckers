@@ -69,6 +69,9 @@ class HasOneThroughTest < Minitest::Test
         title: p.title,
         text: p.text,
         author_id: p.author_id,
+        editor_id: p.editor_id,
+        reviewed_by_id: p.reviewed_by_id,
+        main_category_title: p.main_category_title,
         user: p.user.nil? ? nil : {
           id: p.user.id,
           email: p.user.email,
@@ -89,6 +92,9 @@ class HasOneThroughTest < Minitest::Test
         title: p.title,
         text: p.text,
         author_id: p.author_id,
+        editor_id: p.editor_id,
+        reviewed_by_id: p.reviewed_by_id,
+        main_category_title: p.main_category_title,
         user: p.user.nil? ? nil : {
           id: p.user.id,
           email: p.user.email,
@@ -108,6 +114,9 @@ class HasOneThroughTest < Minitest::Test
         title: p.title,
         text: p.text,
         author_id: p.author_id,
+        editor_id: p.editor_id,
+        reviewed_by_id: p.reviewed_by_id,
+        main_category_title: p.main_category_title,
         account: p.user.nil? ? nil : {
           id: p.user.id,
           email: p.user.email,

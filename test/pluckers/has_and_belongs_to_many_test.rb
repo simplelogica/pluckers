@@ -64,6 +64,9 @@ class HasAndBelongsToManyTest < Minitest::Test
         title: p.title,
         text: p.text,
         author_id: p.author_id,
+        editor_id: p.editor_id,
+        reviewed_by_id: p.reviewed_by_id,
+        main_category_title: p.main_category_title,
         category_ids: p.category_ids,
         categories: p.categories.map {|c|
           {
@@ -86,6 +89,9 @@ class HasAndBelongsToManyTest < Minitest::Test
         title: p.title,
         text: p.text,
         author_id: p.author_id,
+        editor_id: p.editor_id,
+        reviewed_by_id: p.reviewed_by_id,
+        main_category_title: p.main_category_title,
         category_ids: p.category_ids,
         categories: p.categories.map {|c|
           {
@@ -107,6 +113,9 @@ class HasAndBelongsToManyTest < Minitest::Test
         title: p.title,
         text: p.text,
         author_id: p.author_id,
+        editor_id: p.editor_id,
+        reviewed_by_id: p.reviewed_by_id,
+        main_category_title: p.main_category_title,
         category_ids: p.category_ids
       }
     }
@@ -122,6 +131,9 @@ class HasAndBelongsToManyTest < Minitest::Test
         title: p.title,
         text: p.text,
         author_id: p.author_id,
+        editor_id: p.editor_id,
+        reviewed_by_id: p.reviewed_by_id,
+        main_category_title: p.main_category_title,
         category_ids: p.category_ids,
         tags: p.categories.map {|c|
           {
@@ -143,6 +155,9 @@ class HasAndBelongsToManyTest < Minitest::Test
         title: p.title,
         text: p.text,
         author_id: p.author_id,
+        editor_id: p.editor_id,
+        reviewed_by_id: p.reviewed_by_id,
+        main_category_title: p.main_category_title,
         c_ids: p.category_ids
       }
     }
@@ -158,6 +173,9 @@ class HasAndBelongsToManyTest < Minitest::Test
         title: p.title,
         text: p.text,
         author_id: p.author_id,
+        editor_id: p.editor_id,
+        reviewed_by_id: p.reviewed_by_id,
+        main_category_title: p.main_category_title,
         c_ids: p.category_ids,
         tags: p.categories.map {|c|
           {
