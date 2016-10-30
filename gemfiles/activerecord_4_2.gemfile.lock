@@ -26,6 +26,7 @@ GEM
       thor (>= 0.14.0)
     arel (6.0.3)
     builder (3.2.2)
+    byebug (9.0.6)
     globalize (5.0.1)
       activemodel (>= 4.2.0, < 4.3)
       activerecord (>= 4.2.0, < 4.3)
@@ -48,6 +49,7 @@ DEPENDENCIES
   activerecord (= 4.2.7.1)
   appraisal (~> 2.1.0)
   bundler (~> 1.12)
+  byebug
   globalize
   minitest
   minitest-matchers_vaccine
@@ -56,4 +58,4 @@ DEPENDENCIES
   sqlite3
 
 BUNDLED WITH
-   1.12.5
+   1.13.6

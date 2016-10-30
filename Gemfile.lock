@@ -26,6 +26,7 @@ GEM
       thor (>= 0.14.0)
     arel (6.0.3)
     builder (3.2.2)
+    byebug (9.0.5)
     globalize (5.0.1)
       activemodel (>= 4.2.0, < 4.3)
       activerecord (>= 4.2.0, < 4.3)
@@ -45,6 +46,7 @@ PLATFORMS
 DEPENDENCIES
   appraisal (~> 2.1.0)
   bundler (~> 1.12)
+  byebug
   globalize
   minitest
   pluckers!
