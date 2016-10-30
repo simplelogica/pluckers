@@ -54,7 +54,7 @@ module Pluckers
           # We iterate through the class reflections passed as options
           @klass_reflections.slice(*pluck_reflections.keys).
           # And select those that are HasMany
-            select{|_, r| r.is_a?(active_record_has_many_class)}.
+            select{|_, r| active_record_has_many_reflection?(r)}.
           # And store them in the has_many_reflection hash that will be used later
             each do |name, reflection|
               name = name.to_sym

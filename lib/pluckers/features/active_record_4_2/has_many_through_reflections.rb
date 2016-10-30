@@ -4,8 +4,9 @@ module Pluckers
   module Features
     module HasManyThroughReflections
 
-      def active_record_has_many_through_class
-        ActiveRecord::Reflection::ThroughReflection
+      def active_record_has_many_through_reflection? reflection
+        reflection.is_a?(ActiveRecord::Reflection::ThroughReflection) &&
+        reflection.delegate_reflection.is_a?(ActiveRecord::Reflection::HasManyReflection)
       end
 
       include Pluckers::Features::Base::HasManyThroughReflections

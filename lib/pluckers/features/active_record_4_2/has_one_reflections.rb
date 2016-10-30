@@ -4,8 +4,8 @@ module Pluckers
   module Features
     module HasOneReflections
 
-      def active_record_has_one_class
-        ActiveRecord::Reflection::HasOneReflection
+      def active_record_has_one_reflection? reflection
+        reflection.is_a? ActiveRecord::Reflection::HasOneReflection
       end
 
       include Pluckers::Features::Base::HasOneReflections

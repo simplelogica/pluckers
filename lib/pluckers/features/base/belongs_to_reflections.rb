@@ -50,7 +50,7 @@ module Pluckers
           # We iterate through the class reflections passed as options
           @klass_reflections.slice(*pluck_reflections.keys).
           # And select those that are BelongsTo
-            select{|_, r| r.is_a?(active_record_belongs_to_class)}.
+            select{|_, r| active_record_belongs_to_reflection?(r) }.
           # And store them in the belongs_to_reflection hash that will be used later
             each do |name, reflection|
               name = name.to_sym
@@ -104,6 +104,7 @@ module Pluckers
                 reflection_primary_key => @results.map{|_, r| r[reflection_foreign_key] }.compact
               ),
               reflection
+
 
             # We initialize so we return a nil if there are no record related
             @results.each do |_,result|
