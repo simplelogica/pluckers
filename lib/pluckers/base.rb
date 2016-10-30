@@ -1,12 +1,4 @@
-require_relative 'features/simple_attributes'
-require_relative 'features/belongs_to_reflections'
-require_relative 'features/has_many_reflections'
-require_relative 'features/has_many_through_reflections'
-require_relative 'features/has_and_belongs_to_many_reflections'
-require_relative 'features/has_one_reflections'
-require_relative 'features/has_one_through_reflections'
-require_relative 'features/renaming'
-require_relative 'features/globalize'
+require_relative 'features/active_record_4_2'
 
 module Pluckers
 
