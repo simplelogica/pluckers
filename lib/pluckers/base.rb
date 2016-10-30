@@ -1,4 +1,8 @@
-require_relative 'features/active_record_4_2'
+if ActiveRecord.version > Gem::Version.new("4.2") && ActiveRecord.version < Gem::Version.new("5.0")
+  require_relative 'features/active_record_4_2'
+elsif ActiveRecord.version > Gem::Version.new("4.1") && ActiveRecord.version < Gem::Version.new("4.2")
+  require_relative 'features/active_record_4_1'
+end
 
 module Pluckers
 
