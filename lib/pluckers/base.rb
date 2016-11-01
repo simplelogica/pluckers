@@ -98,7 +98,7 @@ module Pluckers
     # in adding some behaviour.
     def configure_query
       @query_to_pluck = @records
-      @attributes_to_pluck = [{ name: @query_to_pluck.primary_key.to_sym, sql: @query_to_pluck.primary_key }]
+      @attributes_to_pluck = [{ name: @query_to_pluck.primary_key.to_sym, sql: "\"#{@query_to_pluck.table_name}\".#{@query_to_pluck.primary_key}" }]
       @results = {}
       @klass_reflections = @query_to_pluck.reflections.with_indifferent_access
 
