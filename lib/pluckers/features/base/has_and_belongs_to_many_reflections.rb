@@ -152,25 +152,9 @@ module Pluckers
             # We get the meta information about the reflection
             klass_reflection = @klass_reflections[name]
 
-            # First,  we get the the join table
-            join_table = Arel::Table.new(klass_reflection.join_table)
-
-            # And now, the foreign_keys.
-            # In our example with BlogPost and Category they would be:
-            # model_foreign_key = blog_post_id
-            # related_model_foreign_key = category_id
-            model_foreign_key = klass_reflection.foreign_key
-            related_model_foreign_key = klass_reflection.association_foreign_key
-
-            # Now we query the join table so we get the two ids
-            ids_query = join_table.where(
-                join_table[model_foreign_key].in(@results.map{|_, r| r[:id] })
-              ).project(
-                join_table[related_model_foreign_key],
-                join_table[model_foreign_key]
-              )
-
-            join_results = ActiveRecord::Base.connection.execute(ids_query.to_sql)
+            # We get the ids. This query is dependant on the ActiveRecord
+            # version, so every feature version has a different implementation
+            join_results = has_and_belongs_to_many_ids(klass_reflection)
 
             ids_reflection_name = "#{name.to_s.singularize}_ids".to_sym
 
@@ -178,6 +162,13 @@ module Pluckers
             @results.each do |_, result|
               result[ids_reflection_name] ||= []
             end
+
+            # And now, the foreign_keys.
+            # In our example with BlogPost and Category they would be:
+            # model_foreign_key = blog_post_id
+            # related_model_foreign_key = category_id
+            model_foreign_key = klass_reflection.foreign_key
+            related_model_foreign_key = klass_reflection.association_foreign_key
 
             # And for each result we fill the results
             join_results.each do |r|

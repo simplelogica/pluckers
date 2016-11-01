@@ -5,8 +5,7 @@ module Pluckers
     module HasAndBelongsToManyReflections
 
       def active_record_has_and_belongs_to_many_reflection? reflection
-        reflection.is_a?(ActiveRecord::Reflection::AssociationReflection) &&
-        (reflection.macro == :has_and_belongs_to_many)
+        reflection.is_a? ActiveRecord::Reflection::HasAndBelongsToManyReflection
       end
 
       def has_and_belongs_to_many_ids klass_reflection
@@ -23,7 +22,7 @@ module Pluckers
 
         # Now we query the join table so we get the two ids
         ids_query = join_table.where(
-            join_table[model_foreign_key].in(@results.map{|_, r| r[:id] })
+            join_table[model_foreign_key].in(@results.map{|_, r| Arel::Nodes::Quoted.new(r[:id]) })
           ).project(
             join_table[related_model_foreign_key],
             join_table[model_foreign_key]

@@ -4,6 +4,8 @@ elsif ActiveRecord.version > Gem::Version.new("4.1") && ActiveRecord.version < G
   require_relative 'features/active_record_4_1'
 elsif ActiveRecord.version > Gem::Version.new("4.0") && ActiveRecord.version < Gem::Version.new("4.1")
   require_relative 'features/active_record_4_0'
+elsif ActiveRecord.version > Gem::Version.new("5.0") && ActiveRecord.version < Gem::Version.new("5.1")
+  require_relative 'features/active_record_5_0'
 else
   require_relative 'features/active_record_4_2'
 end
