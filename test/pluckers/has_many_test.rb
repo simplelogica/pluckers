@@ -1,8 +1,6 @@
 require 'test_helper'
 
-
-
-class HasManyTest < Minitest::Test
+class HasManyTest < test_base_class
 
   include PluckMatcher
 

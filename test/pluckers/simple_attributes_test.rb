@@ -1,8 +1,6 @@
 require 'test_helper'
 
-
-
-class SimpleAttributesTest < Minitest::Test
+class SimpleAttributesTest < test_base_class
 
   include PluckMatcher
 

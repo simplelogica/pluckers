@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class GlobalizeTest < Minitest::Test
+class GlobalizeTest < test_base_class
 
   include PluckMatcher
 
