@@ -2,6 +2,10 @@ if ActiveRecord.version > Gem::Version.new("4.2") && ActiveRecord.version < Gem:
   require_relative 'features/active_record_4_2'
 elsif ActiveRecord.version > Gem::Version.new("4.1") && ActiveRecord.version < Gem::Version.new("4.2")
   require_relative 'features/active_record_4_1'
+elsif ActiveRecord.version > Gem::Version.new("4.0") && ActiveRecord.version < Gem::Version.new("4.1")
+  require_relative 'features/active_record_4_0'
+else
+  require_relative 'features/active_record_4_2'
 end
 
 module Pluckers
@@ -94,7 +98,7 @@ module Pluckers
     # in adding some behaviour.
     def configure_query
       @query_to_pluck = @records
-      @attributes_to_pluck = [{ name: @query_to_pluck.primary_key.to_sym, sql: @query_to_pluck.primary_key }]
+      @attributes_to_pluck = [{ name: @query_to_pluck.primary_key.to_sym, sql: "\"#{@query_to_pluck.table_name}\".#{@query_to_pluck.primary_key}" }]
       @results = {}
       @klass_reflections = @query_to_pluck.reflections.with_indifferent_access
 

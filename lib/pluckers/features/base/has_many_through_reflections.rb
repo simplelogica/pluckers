@@ -89,7 +89,7 @@ module Pluckers
             plucker = reflection[:plucker] || Pluckers::Base
             plucker_options = {
               attributes: [reflection_to_pluck.foreign_key.to_sym],
-              reflections: { klass_reflection.source_reflection_name => reflection }
+              reflections: { klass_reflection.source_reflection.name => reflection }
             }
 
             # In order to create this intermediary plucker we add a where to the
@@ -117,9 +117,9 @@ module Pluckers
                 # insert not the record itself but the desired reflection in the
                 # result
                 if result[reflection_to_pluck.active_record_primary_key.to_sym] == r[reflection_to_pluck.foreign_key.to_sym] &&
-                  r[klass_reflection.source_reflection_name]
+                  r[klass_reflection.source_reflection.name]
 
-                  result[name] += [r[klass_reflection.source_reflection_name]].flatten
+                  result[name] += [r[klass_reflection.source_reflection.name]].flatten
                 end
               end
             end

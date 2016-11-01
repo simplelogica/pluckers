@@ -1,8 +1,6 @@
 require 'test_helper'
 
-
-
-class HasOneThroughTest < Minitest::Test
+class HasOneThroughTest < test_base_class
 
   include PluckMatcher
 
