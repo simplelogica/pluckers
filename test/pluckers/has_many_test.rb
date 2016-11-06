@@ -22,12 +22,12 @@ class HasManyTest < test_base_class
       {
         title: 'Test title 1',
         text: 'Test text 1',
-        author_id: Author.find_by(name: 'Author 1').id
+        author_id: Author.where(name: 'Author 1').first.id
       },
       {
         title: 'Test title 2',
         text: 'Test text 2',
-        author_id: Author.find_by(name: 'Author 2').id
+        author_id: Author.where(name: 'Author 2').first.id
       },
       {
         title: 'Test title 3',
@@ -43,7 +43,7 @@ class HasManyTest < test_base_class
   end
 
   def test_it_fetches_all_simple_attributes
-    @subject = Pluckers::Base.new(Author.all, reflections: { blog_posts: {} })
+    @subject = Pluckers::Base.new(Author.scoped, reflections: { blog_posts: {} })
 
     must pluck Proc.new {|a|
       {
@@ -67,7 +67,7 @@ class HasManyTest < test_base_class
   end
 
   def test_it_fetches_only_required_simple_attributes
-    @subject = Pluckers::Base.new(Author.all, reflections: { blog_posts: { attributes: [:title ]} })
+    @subject = Pluckers::Base.new(Author.scoped, reflections: { blog_posts: { attributes: [:title ]} })
 
     must pluck Proc.new {|a|
       {
@@ -87,7 +87,7 @@ class HasManyTest < test_base_class
   end
 
   def test_it_plucks_only_the_ids
-    @subject = Pluckers::Base.new(Author.all, reflections: { blog_posts: { only_ids: true } })
+    @subject = Pluckers::Base.new(Author.scoped, reflections: { blog_posts: { only_ids: true } })
 
     must pluck Proc.new {|a|
       {
@@ -101,7 +101,7 @@ class HasManyTest < test_base_class
   end
 
   def test_it_renames_the_reflections
-    @subject = Pluckers::Base.new(Author.all, reflections: { blog_posts: { attributes: [:title ]} }, renames: { blog_posts: :posts })
+    @subject = Pluckers::Base.new(Author.scoped, reflections: { blog_posts: { attributes: [:title ]} }, renames: { blog_posts: :posts })
 
     must pluck Proc.new {|a|
       {
@@ -122,7 +122,7 @@ class HasManyTest < test_base_class
 
 
   def test_it_renames_the_ids
-    @subject = Pluckers::Base.new(Author.all, reflections: { blog_posts: { only_ids: true } }, renames: { blog_post_ids: :post_ids })
+    @subject = Pluckers::Base.new(Author.scoped, reflections: { blog_posts: { only_ids: true } }, renames: { blog_post_ids: :post_ids })
 
     must pluck Proc.new {|a|
       {

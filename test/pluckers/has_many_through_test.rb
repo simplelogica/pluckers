@@ -22,12 +22,12 @@ class HasManyThroughTest < test_base_class
       {
         title: 'Test title 1',
         text: 'Test text 1',
-        author_id: Author.find_by(name: 'Author 1').id
+        author_id: Author.where(name: 'Author 1').first.id
       },
       {
         title: 'Test title 2',
         text: 'Test text 2',
-        author_id: Author.find_by(name: 'Author 2').id
+        author_id: Author.where(name: 'Author 2').first.id
       },
       {
         title: 'Test title 3',
@@ -41,22 +41,22 @@ class HasManyThroughTest < test_base_class
       {
         title: 'Reference 1',
         url: 'reference1.es',
-        blog_post_id: BlogPost.find_by(title: 'Test title 1').id
+        blog_post_id: BlogPost.where(title: 'Test title 1').first.id
       },
       {
         title: 'Reference 2',
         url: 'reference2.es',
-        blog_post_id: BlogPost.find_by(title: 'Test title 1').id
+        blog_post_id: BlogPost.where(title: 'Test title 1').first.id
       },
       {
         title: 'Reference 3',
         url: 'reference3.es',
-        blog_post_id: BlogPost.find_by(title: 'Test title 2').id
+        blog_post_id: BlogPost.where(title: 'Test title 2').first.id
       },
       {
         title: 'Reference 4',
         url: 'reference4.es',
-        blog_post_id: BlogPost.find_by(title: 'Test title 3').id
+        blog_post_id: BlogPost.where(title: 'Test title 3').first.id
       }
     ]
 
@@ -71,7 +71,7 @@ class HasManyThroughTest < test_base_class
   end
 
   def test_it_fetches_all_simple_attributes
-    @subject = Pluckers::Base.new(Author.all, reflections: { references: {} })
+    @subject = Pluckers::Base.new(Author.scoped, reflections: { references: {} })
 
     must pluck Proc.new {|a|
       {
@@ -94,7 +94,7 @@ class HasManyThroughTest < test_base_class
   end
 
   def test_it_fetches_only_required_simple_attributes
-    @subject = Pluckers::Base.new(Author.all, reflections: { references: { attributes: [:title] } })
+    @subject = Pluckers::Base.new(Author.scoped, reflections: { references: { attributes: [:title] } })
 
     must pluck Proc.new {|a|
       {
@@ -116,7 +116,7 @@ class HasManyThroughTest < test_base_class
   end
 
   def test_it_renames_the_reflection
-    @subject = Pluckers::Base.new(Author.all, reflections: { references: { attributes: [:title] } }, renames: { references: :bibliography})
+    @subject = Pluckers::Base.new(Author.scoped, reflections: { references: { attributes: [:title] } }, renames: { references: :bibliography})
 
     must pluck Proc.new {|a|
       {

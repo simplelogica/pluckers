@@ -56,7 +56,7 @@ class HasAndBelongsToManyTest < test_base_class
   end
 
   def test_it_fetches_all_simple_attributes
-    @subject = Pluckers::Base.new(BlogPost.all, reflections: { categories: {} })
+    @subject = Pluckers::Base.new(BlogPost.scoped, reflections: { categories: {} })
 
     must pluck Proc.new {|p|
       {
@@ -81,7 +81,7 @@ class HasAndBelongsToManyTest < test_base_class
   end
 
   def test_it_fetches_only_required_simple_attributes
-    @subject = Pluckers::Base.new(BlogPost.all, reflections: { categories: { attributes: [:title ]} })
+    @subject = Pluckers::Base.new(BlogPost.scoped, reflections: { categories: { attributes: [:title ]} })
 
     must pluck Proc.new {|p|
       {
@@ -105,7 +105,7 @@ class HasAndBelongsToManyTest < test_base_class
   end
 
   def test_it_plucks_only_the_ids
-    @subject = Pluckers::Base.new(BlogPost.all, reflections: { categories: { only_ids: true } })
+    @subject = Pluckers::Base.new(BlogPost.scoped, reflections: { categories: { only_ids: true } })
 
     must pluck Proc.new {|p|
       {
@@ -123,7 +123,7 @@ class HasAndBelongsToManyTest < test_base_class
   end
 
   def test_it_renames_the_reflection
-    @subject = Pluckers::Base.new(BlogPost.all, reflections: { categories: { attributes: [:title ]} }, renames: { categories: :tags })
+    @subject = Pluckers::Base.new(BlogPost.scoped, reflections: { categories: { attributes: [:title ]} }, renames: { categories: :tags })
 
     must pluck Proc.new {|p|
       {
@@ -147,7 +147,7 @@ class HasAndBelongsToManyTest < test_base_class
   end
 
   def test_it_renames_the_ids
-    @subject = Pluckers::Base.new(BlogPost.all, reflections: { categories: { only_ids: true } }, renames: { category_ids: :c_ids })
+    @subject = Pluckers::Base.new(BlogPost.scoped, reflections: { categories: { only_ids: true } }, renames: { category_ids: :c_ids })
 
     must pluck Proc.new {|p|
       {
@@ -165,7 +165,7 @@ class HasAndBelongsToManyTest < test_base_class
   end
 
   def test_it_renames_both
-    @subject = Pluckers::Base.new(BlogPost.all, reflections: { categories: { attributes: [:title ]} }, renames: { categories: :tags, category_ids: :c_ids })
+    @subject = Pluckers::Base.new(BlogPost.scoped, reflections: { categories: { attributes: [:title ]} }, renames: { categories: :tags, category_ids: :c_ids })
 
     must pluck Proc.new {|p|
       {
