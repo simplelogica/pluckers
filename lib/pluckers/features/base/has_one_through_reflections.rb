@@ -81,7 +81,7 @@ module Pluckers
             reflection_to_pluck =  klass_reflection.chain.reverse.first
 
             # initialize some options such as the plucker or the scope of the pluck
-            scope = reflection_to_pluck.klass.all
+            scope = reflection_to_pluck.klass.scoped
 
             # Essentially we are going to pluck the has_one relationship and
             # add the reflections option so it recursively plucks the has_one
