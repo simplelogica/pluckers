@@ -132,7 +132,7 @@ module Pluckers
 
 
       # And perform the real ActiveRecord pluck.
-      @records.pluck(*sql_to_pluck).each_with_index do |record, index|
+      pluck_records(sql_to_pluck).each_with_index do |record, index|
         # After the pluck we have to create the hash for each record.
 
         # If there's only a field we will not receive an array. But we need it
@@ -148,6 +148,8 @@ module Pluckers
         @results[attributes_to_return[:id]] = attributes_to_return
       end
     end
+
+    include Features::Pluck
 
     # Now we add all the base features
     prepend Features::Globalize
