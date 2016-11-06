@@ -1,11 +1,15 @@
-if ActiveRecord.version > Gem::Version.new("4.2") && ActiveRecord.version < Gem::Version.new("5.0")
+active_record_version = ActiveRecord.respond_to?(:version) ? ActiveRecord.version : Gem::Version.new(ActiveRecord::VERSION::STRING)
+
+if active_record_version > Gem::Version.new("4.2") && active_record_version < Gem::Version.new("5.0")
   require_relative 'features/active_record_4_2'
-elsif ActiveRecord.version > Gem::Version.new("4.1") && ActiveRecord.version < Gem::Version.new("4.2")
+elsif active_record_version > Gem::Version.new("4.1") && active_record_version < Gem::Version.new("4.2")
   require_relative 'features/active_record_4_1'
-elsif ActiveRecord.version > Gem::Version.new("4.0") && ActiveRecord.version < Gem::Version.new("4.1")
+elsif active_record_version > Gem::Version.new("4.0") && active_record_version < Gem::Version.new("4.1")
   require_relative 'features/active_record_4_0'
-elsif ActiveRecord.version > Gem::Version.new("5.0") && ActiveRecord.version < Gem::Version.new("5.1")
+elsif active_record_version > Gem::Version.new("5.0") && active_record_version < Gem::Version.new("5.1")
   require_relative 'features/active_record_5_0'
+elsif active_record_version > Gem::Version.new("3.2") && active_record_version < Gem::Version.new("4.0")
+  require_relative 'features/active_record_3_2'
 else
   require_relative 'features/active_record_4_2'
 end
