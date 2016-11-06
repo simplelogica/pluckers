@@ -12,7 +12,7 @@ module Pluckers
       def has_and_belongs_to_many_ids klass_reflection
 
         # First,  we get the the join table
-        join_table = Arel::Table.new(klass_reflection.join_table)
+        join_table = Arel::Table.new(klass_reflection.options[:join_table])
 
         # And now, the foreign_keys.
         # In our example with BlogPost and Category they would be:
