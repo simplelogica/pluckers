@@ -1,9 +1,9 @@
 dependencies:
   post:
-    - appraisal install
+    - bundle exec appraisal install
 test:
   override:
-    - appraisal rake test
+    - bundle exec appraisal rake test
 database:
   override:
     - bundle exec rake -T
