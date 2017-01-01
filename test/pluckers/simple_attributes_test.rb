@@ -23,7 +23,7 @@ class SimpleAttributesTest < test_base_class
   end
 
   def test_that_it_fetches_model_attributes_when_no_attributes_are_configured
-    @subject = Pluckers::Base.new(BlogPost.all)
+    @subject = Pluckers::Base.new(BlogPost.send(all_method))
     must pluck Proc.new {|p|
       {
         id: p.id,
@@ -38,7 +38,7 @@ class SimpleAttributesTest < test_base_class
   end
 
   def test_that_it_fetches_only_required_simple_attributes
-    @subject = Pluckers::Base.new(BlogPost.all, attributes: [:text])
+    @subject = Pluckers::Base.new(BlogPost.send(all_method), attributes: [:text])
 
     must pluck Proc.new {|p|
       {
@@ -50,7 +50,7 @@ class SimpleAttributesTest < test_base_class
   end
 
     def test_it_renames_simple_attributes
-    @subject = Pluckers::Base.new(BlogPost.all, attributes: [:text], renames: { text: :body })
+    @subject = Pluckers::Base.new(BlogPost.send(all_method), attributes: [:text], renames: { text: :body })
 
     must pluck Proc.new {|p|
       {

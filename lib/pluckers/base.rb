@@ -1,11 +1,15 @@
-if ActiveRecord.version > Gem::Version.new("4.2") && ActiveRecord.version < Gem::Version.new("5.0")
+active_record_version = ActiveRecord.respond_to?(:version) ? ActiveRecord.version : Gem::Version.new(ActiveRecord::VERSION::STRING)
+
+if active_record_version > Gem::Version.new("4.2") && active_record_version < Gem::Version.new("5.0")
   require_relative 'features/active_record_4_2'
-elsif ActiveRecord.version > Gem::Version.new("4.1") && ActiveRecord.version < Gem::Version.new("4.2")
+elsif active_record_version > Gem::Version.new("4.1") && active_record_version < Gem::Version.new("4.2")
   require_relative 'features/active_record_4_1'
-elsif ActiveRecord.version > Gem::Version.new("4.0") && ActiveRecord.version < Gem::Version.new("4.1")
+elsif active_record_version > Gem::Version.new("4.0") && active_record_version < Gem::Version.new("4.1")
   require_relative 'features/active_record_4_0'
-elsif ActiveRecord.version > Gem::Version.new("5.0") && ActiveRecord.version < Gem::Version.new("5.1")
+elsif active_record_version > Gem::Version.new("5.0") && active_record_version < Gem::Version.new("5.1")
   require_relative 'features/active_record_5_0'
+elsif active_record_version > Gem::Version.new("3.2") && active_record_version < Gem::Version.new("4.0")
+  require_relative 'features/active_record_3_2'
 else
   require_relative 'features/active_record_4_2'
 end
@@ -128,7 +132,7 @@ module Pluckers
 
 
       # And perform the real ActiveRecord pluck.
-      @records.pluck(*sql_to_pluck).each_with_index do |record, index|
+      pluck_records(sql_to_pluck).each_with_index do |record, index|
         # After the pluck we have to create the hash for each record.
 
         # If there's only a field we will not receive an array. But we need it
@@ -144,6 +148,8 @@ module Pluckers
         @results[attributes_to_return[:id]] = attributes_to_return
       end
     end
+
+    include Features::Pluck
 
     # Now we add all the base features
     prepend Features::Globalize

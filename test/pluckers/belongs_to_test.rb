@@ -53,17 +53,17 @@ class BelongsToTest < test_base_class
       {
         title: 'Test title 1',
         text: 'Test text 1',
-        author_id: Author.find_by(name: 'Author 1').id,
-        editor_id: Author.find_by(name: 'Author 2').id,
-        reviewed_by_id: Author.find_by(name: 'Reviewer 2').id,
+        author_id: Author.where(name: 'Author 1').first.id,
+        editor_id: Author.where(name: 'Author 2').first.id,
+        reviewed_by_id: Author.where(name: 'Reviewer 2').first.id,
         main_category: categories.sample
       },
       {
         title: 'Test title 2',
         text: 'Test text 2',
-        author_id: Author.find_by(name: 'Author 2').id,
-        editor_id: Author.find_by(name: 'Author 1').id,
-        reviewed_by_id: Author.find_by(name: 'Reviewer 1').id,
+        author_id: Author.where(name: 'Author 2').first.id,
+        editor_id: Author.where(name: 'Author 1').first.id,
+        reviewed_by_id: Author.where(name: 'Reviewer 1').first.id,
         main_category: categories.sample
       },
       {
@@ -81,7 +81,7 @@ class BelongsToTest < test_base_class
   end
 
   def test_it_fetches_all_simple_attributes
-    @subject = Pluckers::Base.new(BlogPost.all, reflections: { author: {} })
+    @subject = Pluckers::Base.new(BlogPost.send(all_method), reflections: { author: {} })
 
     must pluck Proc.new {|p|
       {
@@ -103,7 +103,7 @@ class BelongsToTest < test_base_class
   end
 
   def test_it_fetches_relationship_with_customized_class_name
-    @subject = Pluckers::Base.new(BlogPost.all, reflections: { editor: {} })
+    @subject = Pluckers::Base.new(BlogPost.send(all_method), reflections: { editor: {} })
 
     must pluck Proc.new {|p|
       {
@@ -125,7 +125,7 @@ class BelongsToTest < test_base_class
   end
 
   def test_it_fetches_relationship_with_customized_foreign_key
-    @subject = Pluckers::Base.new(BlogPost.all, reflections: { reviewer: {} })
+    @subject = Pluckers::Base.new(BlogPost.send(all_method), reflections: { reviewer: {} })
 
     must pluck Proc.new {|p|
       {
@@ -147,7 +147,7 @@ class BelongsToTest < test_base_class
   end
 
   def test_it_fetches_relationship_with_customized_primary_key
-    @subject = Pluckers::Base.new(BlogPost.all, reflections: { main_category: {} })
+    @subject = Pluckers::Base.new(BlogPost.send(all_method), reflections: { main_category: {} })
 
     must pluck Proc.new {|p|
       {
@@ -169,7 +169,7 @@ class BelongsToTest < test_base_class
   end
 
   def test_it_fetches_only_required_simple_attributes
-    @subject = Pluckers::Base.new(BlogPost.all, reflections: { author: { attributes: [:name ]} })
+    @subject = Pluckers::Base.new(BlogPost.send(all_method), reflections: { author: { attributes: [:name ]} })
 
     must pluck Proc.new {|p|
       {
@@ -190,7 +190,7 @@ class BelongsToTest < test_base_class
   end
 
   def test_it_renames_belongs_to_reflections
-    @subject = Pluckers::Base.new(BlogPost.all, reflections: { author: { attributes: [:name ]}}, renames: { author: :post_author } )
+    @subject = Pluckers::Base.new(BlogPost.send(all_method), reflections: { author: { attributes: [:name ]}}, renames: { author: :post_author } )
 
     must pluck Proc.new {|p|
       {

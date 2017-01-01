@@ -59,7 +59,7 @@ class HasOneThroughTest < test_base_class
   end
 
   def test_it_fetches_all_simple_attributes
-    @subject = Pluckers::Base.new(BlogPost.all, reflections: { user: {} })
+    @subject = Pluckers::Base.new(BlogPost.send(all_method), reflections: { user: {} })
 
     must pluck Proc.new {|p|
       {
@@ -82,7 +82,7 @@ class HasOneThroughTest < test_base_class
   end
 
   def test_it_fetches_only_required_simple_attributes
-    @subject = Pluckers::Base.new(BlogPost.all, reflections: { user: { attributes: [:email ]} })
+    @subject = Pluckers::Base.new(BlogPost.send(all_method), reflections: { user: { attributes: [:email ]} })
 
     must pluck Proc.new {|p|
       {
@@ -104,7 +104,7 @@ class HasOneThroughTest < test_base_class
   end
 
   def test_it_renames_the_reflection
-    @subject = Pluckers::Base.new(BlogPost.all, reflections: { user: { attributes: [:email ]} }, renames: { user: :account})
+    @subject = Pluckers::Base.new(BlogPost.send(all_method), reflections: { user: { attributes: [:email ]} }, renames: { user: :account})
 
     must pluck Proc.new {|p|
       {
