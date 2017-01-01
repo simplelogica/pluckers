@@ -1,5 +1,7 @@
 # Pluckers
 
+[![CircleCI](https://circleci.com/gh/simplelogica/pluckers/tree/master.svg?style=svg)](https://circleci.com/gh/simplelogica/pluckers/tree/master)
+
 Gem extending the idea behind AR's pluck method so we can fetch data from multiple tables.
 
 ## Installation
