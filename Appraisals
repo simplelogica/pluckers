@@ -16,7 +16,7 @@ appraise "activerecord-4-2" do
 end
 
 appraise "activerecord-5-0" do
-  gem "activerecord", "= 5.0.0.1"
+  gem "activerecord", "= 5.0.1"
   gem "globalize", github: 'globalize/globalize'
   gem "minitest-matchers_vaccine"
 end
