@@ -9,4 +9,4 @@ database:
     - bundle exec rake -T
 machine:
   ruby:
-    version: 2.3
+    version: "2.3"
