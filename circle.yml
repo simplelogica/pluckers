@@ -10,3 +10,6 @@ test:
 database:
   override:
     - bundle exec rake -T
+machine:
+  ruby:
+    version: 2.3
