@@ -70,6 +70,150 @@ Or install it yourself as:
 
     $ gem install pluckers
 
+## USAGE
+
+### Creating the plucker
+
+You may use the `Pluckers::Base` class to pluck all the information you need:
+
+```ruby
+Pluckers::Base.new(Model.scope, options)
+```
+
+You can use any ActiveRecord Relation. It means you can pluck any scope or collection just as you would use them in your Rails applications:
+
+```ruby
+plucker = Pluckers::Base.new(BlogPost.published)
+plucker = Pluckers::Base.new(Author.all)
+plucker = Pluckers::Base.new(post.categories.published)
+```
+
+Once you have the plucker object you just... pluck.
+
+```ruby
+plucker.pluck
+```
+
+### Selecting columns
+
+When you create the plucker you can configure some options to customize it.
+
+First, you can choose which columns to pluck from the table, so you don't 50 columns when you only need three of them. To do so you will use the `attributes` option.
+
+```ruby
+Pluckers::Base.new(BlogPost.published, { attributes: [:title, :slug, :published_at] }).pluck
+>  [
+>  { id: 33, title: "Lorem Ipsum", slug: 'lorem-ipsum', published_at: "2016-04-07"},
+>  { id: 34, title: "Lorem Ipsum 3", slug: 'lorem-ipsum-3', published_at: "2016-04-09"},
+>  { id: 35, title: "Lorem Ipsum 4", slug: 'lorem-ipsum-4', published_at: "2016-04-12"}
+> ]
+```
+
+Of course, this will be done in just one query.
+
+### Selecting Globalized columns
+
+If you are using Globalize you may find useful to pluck translated columns. You just have to include it in the attributes options and it will automatically recognize it as a translated column and will pluck it from that table.
+
+```ruby
+Pluckers::Base.new(post.categories.published, { attributes: [:name] }).pluck
+>  [
+>  { id: 2, name: "gifs" },
+>  { id: 34, name: "shiba" },
+>  { id: 35, name: "ducktales" }
+> ]
+```
+
+In some scenarios you may need to pluck some specific language. You can do it with the `attributes_with_locale` options.
+
+```ruby
+Pluckers::Base.new(post.categories.published, { attributes_with_locale: { es: [:name] }).pluck
+>  [
+>  { id: 2, name_es: "gifs" },
+>  { id: 34, name_es: "shiba" },
+>  { id: 35, name_es: "patoaventuras" }
+> ]
+```
+
+Since these are independent options you can combine them.
+
+```ruby
+Pluckers::Base.new(post.categories.published, {
+  attributes: [:name],
+  attributes_with_locale: { es: [:name] }
+}).pluck
+>  [
+>  { id: 2, name: "gifs", name_es: "gifs" },
+>  { id: 34, name: "shiba", name_es: "shiba" },
+>  { id: 35, name: "ducktales", name_es: "patoaventuras" }
+> ]
+```
+
+Pluckers will use Globalize fallback locales configuration to return the most appropiate value. I.e. If some post has no content on english locale and its fallback is spanish, it will return the value in spanish locale.
+
+All these operations will be done in an extra query, no matter the number of locales available in Globalize.
+
+### Renaming columns
+
+Imagine you're plucking your spanish name to use it in Google Analytics integration so the visit is registered to the same category, no matter the language.
+
+You may use `name_es` in your code or you could rename the attribute to a more meaningful name such as `name_for_analytics` through the `renames` option.
+
+```ruby
+Pluckers::Base.new(post.categories.published, {
+  attributes: [:name],
+  attributes_with_locale: { es: [:name] },
+  renames: { name_es: :name_for_analytics}
+}).pluck
+>  [
+>  { id: 2, name: "gifs", name_for_analytics: "gifs" },
+>  { id: 34, name: "shiba", name_for_analytics: "shiba" },
+>  { id: 35, name: "ducktales", name_for_analytics: "patoaventuras" }
+> ]
+```
+
+This will require no extra database query.
+
+### Traversing relationships
+
+Until now you can pluck attributes. Now we introduce an option to traverse relationships in the model, so you can pluck not only one model, but any related model, through the `reflections` option.
+
+Imagine, for the previous example, you want to pluck the post titles for each category.
+
+```ruby
+Pluckers::Base.new(post.categories.published, {
+  attributes: [:name],
+  attributes_with_locale: { es: [:name] },
+  renames: { name_es: :name_for_analytics},
+  reflections: {
+    posts: {
+      attributes: [:title, :slug, :published_at],
+    }
+  }
+}).pluck
+>  [
+>  { id: 2, name: "gifs", name_for_analytics: "gifs",
+>     posts: [
+>       { id: 33, title: "Lorem Ipsum", slug: 'lorem-ipsum', published_at: "2016-04-07"},
+>       { id: 32, title: "Lorem Ipsum not", slug: 'lorem-ipsum-not', published_at: nil}
+>     ]
+>  },
+>  { id: 34, name: "shiba", name_for_analytics: "shiba",
+>     posts: [
+>       { id: 34, title: "Lorem Ipsum 3", slug: 'lorem-ipsum-3', published_at: "2016-04-09"},
+>       { id: 35, title: "Lorem Ipsum 4", slug: 'lorem-ipsum-4', published_at: "2016-04-12"}
+>     ]
+>  },
+>  { id: 35, name: "ducktales", name_for_analytics: "patoaventuras"
+>     posts: [
+>       { id: 33, title: "Lorem Ipsum", slug: 'lorem-ipsum', published_at: "2016-04-07"}
+>       { id: 34, title: "Lorem Ipsum 3", slug: 'lorem-ipsum-3', published_at: "2016-04-09"},
+>       { id: 35, title: "Lorem Ipsum 4", slug: 'lorem-ipsum-4', published_at: "2016-04-12"}
+>     ]
+>  }
+> ]
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
