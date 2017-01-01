@@ -48,7 +48,6 @@ PLATFORMS
 DEPENDENCIES
   activerecord (= 4.2.7.1)
   appraisal (~> 2.1.0)
-  bundler (~> 1.12)
   byebug
   globalize
   minitest
