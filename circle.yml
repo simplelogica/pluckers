@@ -1,7 +1,4 @@
 dependencies:
-  pre:
-    - gem uninstall bundler
-    - gem install bundler
   post:
     - bundle exec appraisal install
 test:
