@@ -95,7 +95,7 @@ module Pluckers
 
 
             # initialize some options such as the plucker or the scope of the pluck
-            scope = reflection[:scope] || klass_reflection.klass.scoped
+            scope = reflection[:scope] || klass_reflection.klass.send(all_method)
             plucker = reflection[:plucker] || Pluckers::Base
 
             # If there are attributes configured to be plucked we add the foreign
@@ -150,7 +150,7 @@ module Pluckers
             klass_reflection = @klass_reflections[name]
 
             # We can send an scope option for filtering the related records
-            scope = reflection[:scope] || klass_reflection.klass.scoped
+            scope = reflection[:scope] || klass_reflection.klass.send(all_method)
 
             # We override the attributes as we only get the required ones for
             # relating the records

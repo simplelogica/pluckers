@@ -39,7 +39,7 @@ class HasOneTest < test_base_class
   end
 
   def test_it_fetches_all_simple_attributes
-    @subject = Pluckers::Base.new(Author.scoped, reflections: { user: {} })
+    @subject = Pluckers::Base.new(Author.send(all_method), reflections: { user: {} })
 
     must pluck Proc.new {|a|
       {
@@ -58,7 +58,7 @@ class HasOneTest < test_base_class
   end
 
   def test_it_fetches_only_required_simple_attributes
-    @subject = Pluckers::Base.new(Author.scoped, reflections: { user: { attributes: [:email ]} })
+    @subject = Pluckers::Base.new(Author.send(all_method), reflections: { user: { attributes: [:email ]} })
 
     must pluck Proc.new {|a|
       {
@@ -77,7 +77,7 @@ class HasOneTest < test_base_class
 
 
   def test_it_renames_the_reflections
-    @subject = Pluckers::Base.new(Author.scoped, reflections: { user: { attributes: [:email ]} }, renames: { user: :account })
+    @subject = Pluckers::Base.new(Author.send(all_method), reflections: { user: { attributes: [:email ]} }, renames: { user: :account })
 
     must pluck Proc.new {|a|
       {

@@ -71,7 +71,7 @@ class HasManyThroughTest < test_base_class
   end
 
   def test_it_fetches_all_simple_attributes
-    @subject = Pluckers::Base.new(Author.scoped, reflections: { references: {} })
+    @subject = Pluckers::Base.new(Author.send(all_method), reflections: { references: {} })
 
     must pluck Proc.new {|a|
       {
@@ -94,7 +94,7 @@ class HasManyThroughTest < test_base_class
   end
 
   def test_it_fetches_only_required_simple_attributes
-    @subject = Pluckers::Base.new(Author.scoped, reflections: { references: { attributes: [:title] } })
+    @subject = Pluckers::Base.new(Author.send(all_method), reflections: { references: { attributes: [:title] } })
 
     must pluck Proc.new {|a|
       {
@@ -116,7 +116,7 @@ class HasManyThroughTest < test_base_class
   end
 
   def test_it_renames_the_reflection
-    @subject = Pluckers::Base.new(Author.scoped, reflections: { references: { attributes: [:title] } }, renames: { references: :bibliography})
+    @subject = Pluckers::Base.new(Author.send(all_method), reflections: { references: { attributes: [:title] } }, renames: { references: :bibliography})
 
     must pluck Proc.new {|a|
       {

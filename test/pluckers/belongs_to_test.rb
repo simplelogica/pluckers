@@ -81,7 +81,7 @@ class BelongsToTest < test_base_class
   end
 
   def test_it_fetches_all_simple_attributes
-    @subject = Pluckers::Base.new(BlogPost.scoped, reflections: { author: {} })
+    @subject = Pluckers::Base.new(BlogPost.send(all_method), reflections: { author: {} })
 
     must pluck Proc.new {|p|
       {
@@ -103,7 +103,7 @@ class BelongsToTest < test_base_class
   end
 
   def test_it_fetches_relationship_with_customized_class_name
-    @subject = Pluckers::Base.new(BlogPost.scoped, reflections: { editor: {} })
+    @subject = Pluckers::Base.new(BlogPost.send(all_method), reflections: { editor: {} })
 
     must pluck Proc.new {|p|
       {
@@ -125,7 +125,7 @@ class BelongsToTest < test_base_class
   end
 
   def test_it_fetches_relationship_with_customized_foreign_key
-    @subject = Pluckers::Base.new(BlogPost.scoped, reflections: { reviewer: {} })
+    @subject = Pluckers::Base.new(BlogPost.send(all_method), reflections: { reviewer: {} })
 
     must pluck Proc.new {|p|
       {
@@ -147,7 +147,7 @@ class BelongsToTest < test_base_class
   end
 
   def test_it_fetches_relationship_with_customized_primary_key
-    @subject = Pluckers::Base.new(BlogPost.scoped, reflections: { main_category: {} })
+    @subject = Pluckers::Base.new(BlogPost.send(all_method), reflections: { main_category: {} })
 
     must pluck Proc.new {|p|
       {
@@ -169,7 +169,7 @@ class BelongsToTest < test_base_class
   end
 
   def test_it_fetches_only_required_simple_attributes
-    @subject = Pluckers::Base.new(BlogPost.scoped, reflections: { author: { attributes: [:name ]} })
+    @subject = Pluckers::Base.new(BlogPost.send(all_method), reflections: { author: { attributes: [:name ]} })
 
     must pluck Proc.new {|p|
       {
@@ -190,7 +190,7 @@ class BelongsToTest < test_base_class
   end
 
   def test_it_renames_belongs_to_reflections
-    @subject = Pluckers::Base.new(BlogPost.scoped, reflections: { author: { attributes: [:name ]}}, renames: { author: :post_author } )
+    @subject = Pluckers::Base.new(BlogPost.send(all_method), reflections: { author: { attributes: [:name ]}}, renames: { author: :post_author } )
 
     must pluck Proc.new {|p|
       {

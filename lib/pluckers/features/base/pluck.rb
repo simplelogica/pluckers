@@ -20,6 +20,10 @@ module Pluckers
           @records.pluck(*fields_to_pluck)
         end
 
+        def all_method
+          :all
+        end
+
       end
     end
   end

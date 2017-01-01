@@ -88,7 +88,7 @@ module Pluckers
             klass_reflection = @klass_reflections[name]
 
             # initialize some options such as the plucker or the scope of the pluck
-            scope = reflection[:scope] || klass_reflection.klass.scoped
+            scope = reflection[:scope] || klass_reflection.klass.send(all_method)
             plucker = reflection[:plucker] || Pluckers::Base
 
             reflection_primary_key = klass_reflection.active_record_primary_key.to_sym

@@ -41,7 +41,7 @@ class GlobalizeTest < test_base_class
   end
 
   def test_that_it_fetches_translated_attributes
-    @subject = Pluckers::Base.new(BlogPost.scoped, attributes: [:translated_title])
+    @subject = Pluckers::Base.new(BlogPost.send(all_method), attributes: [:translated_title])
 
     must pluck Proc.new {|p|
       {
@@ -53,7 +53,7 @@ class GlobalizeTest < test_base_class
   end
 
   def test_that_it_fetches_attributes_with_locales
-    @subject = Pluckers::Base.new(BlogPost.scoped, attributes_with_locale: { es: [:translated_title] })
+    @subject = Pluckers::Base.new(BlogPost.send(all_method), attributes_with_locale: { es: [:translated_title] })
 
     must pluck Proc.new {|p|
       {
@@ -71,7 +71,7 @@ class GlobalizeTest < test_base_class
   end
 
   def test_it_renames_simple_attributes
-    @subject = Pluckers::Base.new(BlogPost.scoped, attributes: [:translated_title], renames: { translated_title: :i18n_title })
+    @subject = Pluckers::Base.new(BlogPost.send(all_method), attributes: [:translated_title], renames: { translated_title: :i18n_title })
 
     must pluck Proc.new {|p|
       {

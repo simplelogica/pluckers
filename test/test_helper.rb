@@ -17,6 +17,11 @@ def test_base_class
   (active_record_version > Gem::Version.new("4.1") || active_record_version < Gem::Version.new("4.0")) ? Minitest::Test : Minitest::Unit::TestCase
 end
 
+def all_method
+  active_record_version = ActiveRecord.respond_to?(:version) ? ActiveRecord.version : Gem::Version.new(ActiveRecord::VERSION::STRING)
+  active_record_version < Gem::Version.new("4.0") ? :scoped : :all
+end
+
 
 if (active_record_version < Gem::Version.new("4.1"))
 
@@ -24,3 +29,4 @@ if (active_record_version < Gem::Version.new("4.1"))
     matcher.matches?(@subject)
   end
 end
+

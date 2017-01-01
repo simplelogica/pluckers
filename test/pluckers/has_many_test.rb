@@ -43,7 +43,7 @@ class HasManyTest < test_base_class
   end
 
   def test_it_fetches_all_simple_attributes
-    @subject = Pluckers::Base.new(Author.scoped, reflections: { blog_posts: {} })
+    @subject = Pluckers::Base.new(Author.send(all_method), reflections: { blog_posts: {} })
 
     must pluck Proc.new {|a|
       {
@@ -67,7 +67,7 @@ class HasManyTest < test_base_class
   end
 
   def test_it_fetches_only_required_simple_attributes
-    @subject = Pluckers::Base.new(Author.scoped, reflections: { blog_posts: { attributes: [:title ]} })
+    @subject = Pluckers::Base.new(Author.send(all_method), reflections: { blog_posts: { attributes: [:title ]} })
 
     must pluck Proc.new {|a|
       {
@@ -87,7 +87,7 @@ class HasManyTest < test_base_class
   end
 
   def test_it_plucks_only_the_ids
-    @subject = Pluckers::Base.new(Author.scoped, reflections: { blog_posts: { only_ids: true } })
+    @subject = Pluckers::Base.new(Author.send(all_method), reflections: { blog_posts: { only_ids: true } })
 
     must pluck Proc.new {|a|
       {
@@ -101,7 +101,7 @@ class HasManyTest < test_base_class
   end
 
   def test_it_renames_the_reflections
-    @subject = Pluckers::Base.new(Author.scoped, reflections: { blog_posts: { attributes: [:title ]} }, renames: { blog_posts: :posts })
+    @subject = Pluckers::Base.new(Author.send(all_method), reflections: { blog_posts: { attributes: [:title ]} }, renames: { blog_posts: :posts })
 
     must pluck Proc.new {|a|
       {
@@ -122,7 +122,7 @@ class HasManyTest < test_base_class
 
 
   def test_it_renames_the_ids
-    @subject = Pluckers::Base.new(Author.scoped, reflections: { blog_posts: { only_ids: true } }, renames: { blog_post_ids: :post_ids })
+    @subject = Pluckers::Base.new(Author.send(all_method), reflections: { blog_posts: { only_ids: true } }, renames: { blog_post_ids: :post_ids })
 
     must pluck Proc.new {|a|
       {

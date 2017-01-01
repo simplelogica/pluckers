@@ -90,7 +90,7 @@ module Pluckers
             klass_reflection = @klass_reflections[name]
 
             # initialize some options such as the plucker or the scope of the pluck
-            scope = reflection[:scope] || klass_reflection.klass.scoped
+            scope = reflection[:scope] || klass_reflection.klass.send(all_method)
             plucker = reflection[:plucker] || Pluckers::Base
 
             # We will use the _ids already fetched to check which records we should pluck

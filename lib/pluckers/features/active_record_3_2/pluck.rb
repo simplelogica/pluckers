@@ -18,6 +18,9 @@ module Pluckers
         end
       end
 
+      def all_method
+        :scoped
+      end
     end
   end
 end
