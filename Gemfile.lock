@@ -45,7 +45,7 @@ PLATFORMS
 
 DEPENDENCIES
   appraisal (~> 2.1.0)
-  bundler (~> 1.12)
+  bundler
   byebug
   globalize
   minitest
