@@ -1,5 +1,5 @@
 ##
-# This module includes the pluck method that is used in the Minitest::Test
+# This module includes the pluck method that is used in the Minitest::Unit::TestCase
 # classes.
 #
 # It simulates the pluck with regular AR objects and then compares with the

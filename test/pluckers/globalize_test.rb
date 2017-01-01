@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class SimpleAttributesTest < Minitest::Test
+class GlobalizeTest < test_base_class
 
   include PluckMatcher
 
@@ -8,7 +8,7 @@ class SimpleAttributesTest < Minitest::Test
     @post_data = [
       {
         text: 'Test text 1',
-        translations: [
+        translations_attributes: [
           {
             locale: :es,
             translated_title: 'Test title 1 (ES)',
@@ -21,7 +21,7 @@ class SimpleAttributesTest < Minitest::Test
       },
       {
         text: 'Test text 2',
-        translations: [
+        translations_attributes: [
           {
             locale: :es,
             translated_title: 'Test title 2 (ES)',
@@ -41,7 +41,7 @@ class SimpleAttributesTest < Minitest::Test
   end
 
   def test_that_it_fetches_translated_attributes
-    @subject = Pluckers::Base.new(BlogPost.all, attributes: [:translated_title])
+    @subject = Pluckers::Base.new(BlogPost.send(all_method), attributes: [:translated_title])
 
     must pluck Proc.new {|p|
       {
@@ -53,7 +53,7 @@ class SimpleAttributesTest < Minitest::Test
   end
 
   def test_that_it_fetches_attributes_with_locales
-    @subject = Pluckers::Base.new(BlogPost.all, attributes_with_locale: { es: [:translated_title] })
+    @subject = Pluckers::Base.new(BlogPost.send(all_method), attributes_with_locale: { es: [:translated_title] })
 
     must pluck Proc.new {|p|
       {
@@ -61,6 +61,9 @@ class SimpleAttributesTest < Minitest::Test
         title: p.title,
         text: p.text,
         author_id: p.author_id,
+        editor_id: p.editor_id,
+        reviewed_by_id: p.reviewed_by_id,
+        main_category_title: p.main_category_title,
         translated_title_es: p.translation_for(:es).translated_title
       }
     }
@@ -68,7 +71,7 @@ class SimpleAttributesTest < Minitest::Test
   end
 
   def test_it_renames_simple_attributes
-    @subject = Pluckers::Base.new(BlogPost.all, attributes: [:translated_title], renames: { translated_title: :i18n_title })
+    @subject = Pluckers::Base.new(BlogPost.send(all_method), attributes: [:translated_title], renames: { translated_title: :i18n_title })
 
     must pluck Proc.new {|p|
       {

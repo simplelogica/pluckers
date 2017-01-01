@@ -1,0 +1,15 @@
+dependencies:
+  pre:
+    - gem uninstall bundler -x
+    - gem install bundler
+  post:
+    - bundle exec appraisal install
+test:
+  override:
+    - bundle exec appraisal rake test
+database:
+  override:
+    - bundle exec rake -T
+machine:
+  ruby:
+    version: "2.3"

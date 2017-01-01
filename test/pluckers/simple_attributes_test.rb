@@ -1,8 +1,6 @@
 require 'test_helper'
 
-
-
-class SimpleAttributesTest < Minitest::Test
+class SimpleAttributesTest < test_base_class
 
   include PluckMatcher
 
@@ -25,19 +23,22 @@ class SimpleAttributesTest < Minitest::Test
   end
 
   def test_that_it_fetches_model_attributes_when_no_attributes_are_configured
-    @subject = Pluckers::Base.new(BlogPost.all)
+    @subject = Pluckers::Base.new(BlogPost.send(all_method))
     must pluck Proc.new {|p|
       {
         id: p.id,
         title: p.title,
         text: p.text,
-        author_id: nil
+        author_id: nil,
+        editor_id: p.editor_id,
+        reviewed_by_id: p.reviewed_by_id,
+        main_category_title: p.main_category_title,
       }
     }
   end
 
   def test_that_it_fetches_only_required_simple_attributes
-    @subject = Pluckers::Base.new(BlogPost.all, attributes: [:text])
+    @subject = Pluckers::Base.new(BlogPost.send(all_method), attributes: [:text])
 
     must pluck Proc.new {|p|
       {
@@ -49,7 +50,7 @@ class SimpleAttributesTest < Minitest::Test
   end
 
     def test_it_renames_simple_attributes
-    @subject = Pluckers::Base.new(BlogPost.all, attributes: [:text], renames: { text: :body })
+    @subject = Pluckers::Base.new(BlogPost.send(all_method), attributes: [:text], renames: { text: :body })
 
     must pluck Proc.new {|p|
       {

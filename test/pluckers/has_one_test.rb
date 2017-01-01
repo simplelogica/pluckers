@@ -1,8 +1,6 @@
 require 'test_helper'
 
-
-
-class HasOneTest < Minitest::Test
+class HasOneTest < test_base_class
 
   include PluckMatcher
 
@@ -41,7 +39,7 @@ class HasOneTest < Minitest::Test
   end
 
   def test_it_fetches_all_simple_attributes
-    @subject = Pluckers::Base.new(Author.all, reflections: { user: {} })
+    @subject = Pluckers::Base.new(Author.send(all_method), reflections: { user: {} })
 
     must pluck Proc.new {|a|
       {
@@ -60,7 +58,7 @@ class HasOneTest < Minitest::Test
   end
 
   def test_it_fetches_only_required_simple_attributes
-    @subject = Pluckers::Base.new(Author.all, reflections: { user: { attributes: [:email ]} })
+    @subject = Pluckers::Base.new(Author.send(all_method), reflections: { user: { attributes: [:email ]} })
 
     must pluck Proc.new {|a|
       {
@@ -79,7 +77,7 @@ class HasOneTest < Minitest::Test
 
 
   def test_it_renames_the_reflections
-    @subject = Pluckers::Base.new(Author.all, reflections: { user: { attributes: [:email ]} }, renames: { user: :account })
+    @subject = Pluckers::Base.new(Author.send(all_method), reflections: { user: { attributes: [:email ]} }, renames: { user: :account })
 
     must pluck Proc.new {|a|
       {

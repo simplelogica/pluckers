@@ -26,12 +26,12 @@ Gem::Specification.new do |spec|
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "activerecord", "~> 4.0"
+  spec.add_dependency "activerecord", "> 3.2", "< 5.1"
 
-  spec.add_development_dependency "bundler", "~> 1.12"
   spec.add_development_dependency "rake", "~> 10.0"
-  spec.add_development_dependency "minitest", "~> 5.0"
-  spec.add_development_dependency "minitest-matchers_vaccine"
+  spec.add_development_dependency "minitest"
   spec.add_development_dependency "sqlite3"
-  spec.add_development_dependency "globalize", "~> 5.0"
+  spec.add_development_dependency "globalize"
+  spec.add_development_dependency "byebug"
+  spec.add_development_dependency "appraisal", "~> 2.1.0"
 end
