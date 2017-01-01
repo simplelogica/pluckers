@@ -7,3 +7,6 @@ test:
     - bundle exec appraisal rake db:migrate
   override:
     - bundle exec appraisal rake test
+database:
+  override:
+    -
