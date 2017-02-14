@@ -23,4 +23,4 @@ Pluckers::Base.new(post.categories.published, {
 
 This will require no extra database query.
 
-NEXT: [How to use your plucker for traversing through relationships and obtain data from several tables without N+1 and with the minimum queries](./relationships.md)
+NEXT: [How to use your plucker for traversing through relationships in a recursive way and obtain data from several tables without N+1 and with the minimum queries](./relationships.md)

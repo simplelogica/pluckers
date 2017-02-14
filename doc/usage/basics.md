@@ -26,7 +26,7 @@ plucker.pluck
 
 When you create the plucker you can configure some options to customize it.
 
-First, you can choose which columns to pluck from the table, so you don't 50 columns when you only need three of them. To do so you will use the `attributes` option.
+First, you can choose which columns to pluck from the table, so you don't pluck 50 columns when you only need three of them. To do so you will use the `attributes` option.
 
 ```ruby
 Pluckers::Base.new(BlogPost.published, { attributes: [:title, :slug, :published_at] }).pluck

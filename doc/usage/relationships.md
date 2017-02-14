@@ -178,4 +178,4 @@ This would've been performed with 4 database queries:
   - Related posts attributes filtering with the `published` scope as defined in the `BlogPost` model.
   - Related authors from related posts attributes.
 
-NEXT: [How to create your own plucker classes to encapsulate all your plucking options and logic](./relationships.md)
+NEXT: [How to create your own plucker classes to encapsulate all your plucking options and logic](./extending.md)
