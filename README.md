@@ -102,11 +102,13 @@ First, you can choose which columns to pluck from the table, so you don't 50 col
 
 ```ruby
 Pluckers::Base.new(BlogPost.published, { attributes: [:title, :slug, :published_at] }).pluck
->  [
->  { id: 33, title: "Lorem Ipsum", slug: 'lorem-ipsum', published_at: "2016-04-07"},
->  { id: 34, title: "Lorem Ipsum 3", slug: 'lorem-ipsum-3', published_at: "2016-04-09"},
->  { id: 35, title: "Lorem Ipsum 4", slug: 'lorem-ipsum-4', published_at: "2016-04-12"}
-> ]
+```
+```ruby
+[
+  { id: 33, title: "Lorem Ipsum", slug: 'lorem-ipsum', published_at: "2016-04-07"},
+  { id: 34, title: "Lorem Ipsum 3", slug: 'lorem-ipsum-3', published_at: "2016-04-09"},
+  { id: 35, title: "Lorem Ipsum 4", slug: 'lorem-ipsum-4', published_at: "2016-04-12"}
+]
 ```
 
 Of course, this will be done in just one query.
@@ -117,22 +119,26 @@ If you are using Globalize you may find useful to pluck translated columns. You 
 
 ```ruby
 Pluckers::Base.new(post.categories.published, { attributes: [:name] }).pluck
->  [
->  { id: 2, name: "gifs" },
->  { id: 34, name: "shiba" },
->  { id: 35, name: "ducktales" }
-> ]
+```
+```ruby
+[
+  { id: 2, name: "gifs" },
+  { id: 34, name: "shiba" },
+  { id: 35, name: "ducktales" }
+]
 ```
 
 In some scenarios you may need to pluck some specific language. You can do it with the `attributes_with_locale` options.
 
 ```ruby
 Pluckers::Base.new(post.categories.published, { attributes_with_locale: { es: [:name] }).pluck
->  [
->  { id: 2, name_es: "gifs" },
->  { id: 34, name_es: "shiba" },
->  { id: 35, name_es: "patoaventuras" }
-> ]
+```
+```ruby
+[
+  { id: 2, name_es: "gifs" },
+  { id: 34, name_es: "shiba" },
+  { id: 35, name_es: "patoaventuras" }
+]
 ```
 
 Since these are independent options you can combine them.
@@ -142,11 +148,13 @@ Pluckers::Base.new(post.categories.published, {
   attributes: [:name],
   attributes_with_locale: { es: [:name] }
 }).pluck
->  [
->  { id: 2, name: "gifs", name_es: "gifs" },
->  { id: 34, name: "shiba", name_es: "shiba" },
->  { id: 35, name: "ducktales", name_es: "patoaventuras" }
-> ]
+```
+```ruby
+[
+  { id: 2, name: "gifs", name_es: "gifs" },
+  { id: 34, name: "shiba", name_es: "shiba" },
+  { id: 35, name: "ducktales", name_es: "patoaventuras" }
+]
 ```
 
 Pluckers will use Globalize fallback locales configuration to return the most appropiate value. I.e. If some post has no content on english locale and its fallback is spanish, it will return the value in spanish locale.
@@ -165,11 +173,13 @@ Pluckers::Base.new(post.categories.published, {
   attributes_with_locale: { es: [:name] },
   renames: { name_es: :name_for_analytics}
 }).pluck
->  [
->  { id: 2, name: "gifs", name_for_analytics: "gifs" },
->  { id: 34, name: "shiba", name_for_analytics: "shiba" },
->  { id: 35, name: "ducktales", name_for_analytics: "patoaventuras" }
-> ]
+```
+```ruby
+[
+  { id: 2, name: "gifs", name_for_analytics: "gifs" },
+  { id: 34, name: "shiba", name_for_analytics: "shiba" },
+  { id: 35, name: "ducktales", name_for_analytics: "patoaventuras" }
+]
 ```
 
 This will require no extra database query.
@@ -191,27 +201,29 @@ Pluckers::Base.new(post.categories.published, {
     }
   }
 }).pluck
->  [
->  { id: 2, name: "gifs", name_for_analytics: "gifs",
->     posts: [
->       { id: 33, title: "Lorem Ipsum", slug: 'lorem-ipsum', published_at: "2016-04-07"},
->       { id: 32, title: "Lorem Ipsum not", slug: 'lorem-ipsum-not', published_at: nil}
->     ]
->  },
->  { id: 34, name: "shiba", name_for_analytics: "shiba",
->     posts: [
->       { id: 34, title: "Lorem Ipsum 3", slug: 'lorem-ipsum-3', published_at: "2016-04-09"},
->       { id: 35, title: "Lorem Ipsum 4", slug: 'lorem-ipsum-4', published_at: "2016-04-12"}
->     ]
->  },
->  { id: 35, name: "ducktales", name_for_analytics: "patoaventuras"
->     posts: [
->       { id: 33, title: "Lorem Ipsum", slug: 'lorem-ipsum', published_at: "2016-04-07"}
->       { id: 34, title: "Lorem Ipsum 3", slug: 'lorem-ipsum-3', published_at: "2016-04-09"},
->       { id: 35, title: "Lorem Ipsum 4", slug: 'lorem-ipsum-4', published_at: "2016-04-12"}
->     ]
->  }
-> ]
+```
+```ruby
+[
+  { id: 2, name: "gifs", name_for_analytics: "gifs",
+     posts: [
+       { id: 33, title: "Lorem Ipsum", slug: 'lorem-ipsum', published_at: "2016-04-07"},
+       { id: 32, title: "Lorem Ipsum not", slug: 'lorem-ipsum-not', published_at: nil}
+     ]
+  },
+  { id: 34, name: "shiba", name_for_analytics: "shiba",
+     posts: [
+       { id: 34, title: "Lorem Ipsum 3", slug: 'lorem-ipsum-3', published_at: "2016-04-09"},
+       { id: 35, title: "Lorem Ipsum 4", slug: 'lorem-ipsum-4', published_at: "2016-04-12"}
+     ]
+  },
+  { id: 35, name: "ducktales", name_for_analytics: "patoaventuras"
+     posts: [
+       { id: 33, title: "Lorem Ipsum", slug: 'lorem-ipsum', published_at: "2016-04-07"}
+       { id: 34, title: "Lorem Ipsum 3", slug: 'lorem-ipsum-3', published_at: "2016-04-09"},
+       { id: 35, title: "Lorem Ipsum 4", slug: 'lorem-ipsum-4', published_at: "2016-04-12"}
+     ]
+  }
+]
 ```
 
 As we just use the `attributes` option for the reflection we just perform an extra database query, avoiding N+1.
@@ -236,41 +248,43 @@ Pluckers::Base.new(post.categories.published, {
     }
   }
 }).pluck
->  [
->  { id: 2, name: "gifs", name_for_analytics: "gifs",
->     posts: [
->       { id: 33, title: "Lorem Ipsum", slug: 'lorem-ipsum', published_at: "2016-04-07",
->         autor: { id: 1, name: "Someone"}
->       },
->       { id: 32, title: "Lorem Ipsum not", slug: 'lorem-ipsum-not', published_at: nil,
->         autor: { id: 2, name: "Someone else"}
->       }
->     ]
->  },
->  { id: 34, name: "shiba", name_for_analytics: "shiba",
->     posts: [
->       { id: 34, title: "Lorem Ipsum 3", slug: 'lorem-ipsum-3', published_at: "2016-04-09",
->         autor: { id: 3, name: "Another one"}
->       },
->       { id: 35, title: "Lorem Ipsum 4", slug: 'lorem-ipsum-4', published_at: "2016-04-12",
->         autor: { id: 1, name: "Someone"}
->       }
->     ]
->  },
->  { id: 35, name: "ducktales", name_for_analytics: "patoaventuras"
->     posts: [
->       { id: 33, title: "Lorem Ipsum", slug: 'lorem-ipsum', published_at: "2016-04-07",
->         autor: { id: 1, name: "Someone"}
->       },
->       { id: 34, title: "Lorem Ipsum 3", slug: 'lorem-ipsum-3', published_at: "2016-04-09",
->         autor: { id: 3, name: "Another one"}
->       },
->       { id: 35, title: "Lorem Ipsum 4", slug: 'lorem-ipsum-4', published_at: "2016-04-12",
->         autor: { id: 1, name: "Someone"}
->       }
->     ]
->  }
-> ]
+```
+```ruby
+[
+  { id: 2, name: "gifs", name_for_analytics: "gifs",
+     posts: [
+       { id: 33, title: "Lorem Ipsum", slug: 'lorem-ipsum', published_at: "2016-04-07",
+         autor: { id: 1, name: "Someone"}
+       },
+       { id: 32, title: "Lorem Ipsum not", slug: 'lorem-ipsum-not', published_at: nil,
+         autor: { id: 2, name: "Someone else"}
+       }
+     ]
+  },
+  { id: 34, name: "shiba", name_for_analytics: "shiba",
+     posts: [
+       { id: 34, title: "Lorem Ipsum 3", slug: 'lorem-ipsum-3', published_at: "2016-04-09",
+         autor: { id: 3, name: "Another one"}
+       },
+       { id: 35, title: "Lorem Ipsum 4", slug: 'lorem-ipsum-4', published_at: "2016-04-12",
+         autor: { id: 1, name: "Someone"}
+       }
+     ]
+  },
+  { id: 35, name: "ducktales", name_for_analytics: "patoaventuras"
+     posts: [
+       { id: 33, title: "Lorem Ipsum", slug: 'lorem-ipsum', published_at: "2016-04-07",
+         autor: { id: 1, name: "Someone"}
+       },
+       { id: 34, title: "Lorem Ipsum 3", slug: 'lorem-ipsum-3', published_at: "2016-04-09",
+         autor: { id: 3, name: "Another one"}
+       },
+       { id: 35, title: "Lorem Ipsum 4", slug: 'lorem-ipsum-4', published_at: "2016-04-12",
+         autor: { id: 1, name: "Someone"}
+       }
+     ]
+  }
+]
 ```
 
 This would've been performed with 4 database queries:
@@ -300,6 +314,47 @@ Pluckers::Base.new(post.categories.published, {
   }
 }).pluck
 ```
+```ruby
+[
+  { id: 2, name: "gifs", name_for_analytics: "gifs",
+     posts: [
+       { id: 33, title: "Lorem Ipsum", slug: 'lorem-ipsum', published_at: "2016-04-07",
+         autor: { id: 1, name: "Someone"}
+       }
+     ]
+  },
+  { id: 34, name: "shiba", name_for_analytics: "shiba",
+     posts: [
+       { id: 34, title: "Lorem Ipsum 3", slug: 'lorem-ipsum-3', published_at: "2016-04-09",
+         autor: { id: 3, name: "Another one"}
+       },
+       { id: 35, title: "Lorem Ipsum 4", slug: 'lorem-ipsum-4', published_at: "2016-04-12",
+         autor: { id: 1, name: "Someone"}
+       }
+     ]
+  },
+  { id: 35, name: "ducktales", name_for_analytics: "patoaventuras"
+     posts: [
+       { id: 33, title: "Lorem Ipsum", slug: 'lorem-ipsum', published_at: "2016-04-07",
+         autor: { id: 1, name: "Someone"}
+       },
+       { id: 34, title: "Lorem Ipsum 3", slug: 'lorem-ipsum-3', published_at: "2016-04-09",
+         autor: { id: 3, name: "Another one"}
+       },
+       { id: 35, title: "Lorem Ipsum 4", slug: 'lorem-ipsum-4', published_at: "2016-04-12",
+         autor: { id: 1, name: "Someone"}
+       }
+     ]
+  }
+]
+```
+
+This would've been performed with 4 database queries:
+
+  - Category attributes.
+  - Category globalized attributes.
+  - Related posts attributes filtering with the `published` scope as defined in the `BlogPost` model.
+  - Related authors from related posts attributes.
 
 ## Development
 
