@@ -1,4 +1,4 @@
-# Creating the plucker and fething basic data
+# Creating the plucker and fetching basic data
 
 ## Creating the plucker
 
