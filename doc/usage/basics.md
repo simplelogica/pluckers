@@ -22,6 +22,8 @@ Once you have the plucker object you just... pluck.
 plucker.pluck
 ```
 
+If you don't select any columns the plucker will use the `attributes` method of the class to pluck all the attributes from the database.
+
 ## Selecting columns
 
 When you create the plucker you can configure some options to customize it.

@@ -4,7 +4,7 @@ PREVIOUSLY: [How to rename your fetched attributes](./renaming.md)
 
 Until now you can pluck attributes. Now we introduce an option to traverse relationships in the model, so you can pluck not only one model, but any related model, through the `reflections` option.
 
-## Fetching basic data
+## Fetching relationships
 
 Imagine, for the previous example, you want to pluck the post information for each category.
 
@@ -49,6 +49,41 @@ As we just use the `attributes` option for the reflection we just perform an ext
 Each element in the reflections options has a key and a hash of options. The key is the name of the relationship as defined in the Active Record model. The value is a hash of options that takes the exact same options that are allowed for the plucker. In fact, internally we create another plucker to retrieve the posts.
 
 This means that we can do everything in this "secondary" plucker. We can get globalize columns, we can rename... and we can also get another related models, giving us the ability to obtain a whole tree of models and objects in just one single point, with the minimum database queries required.
+
+## Foreign keys and minimum data plucked
+
+Although in the examples we only show ids involved, relationships configured with different foreign keys can be fetched too as the configuration is read by the plucker to use the proper columns in both involved tables.
+
+In order to be able to relate the plucked data all the foreign keys must be plucked, that's why in the previous example all the posts plucked their `id` although in the `attributes` option we specied only `[:title, :slug, :published_at]`.
+
+## Fetching only ids
+
+For `has_many` and `has_and_belongs_to_many` relationships you could be interested in only fetching the ids of the related objects. You can get this by using the `only_ids` option in the relationship to fetch.
+
+```ruby
+Pluckers::Base.new(post.categories.published, {
+  attributes: [:name],
+  attributes_with_locale: { es: [:name] },
+  renames: { name_es: :name_for_analytics},
+  reflections: {
+    posts: { only_ids: true }
+  }
+}).pluck
+```
+
+```ruby
+[
+  { id: 2, name: "gifs", name_for_analytics: "gifs",
+     post_ids: [33, 32]
+  },
+  { id: 34, name: "shiba", name_for_analytics: "shiba",
+     posts_ids: [34, 35]
+  },
+  { id: 35, name: "ducktales", name_for_analytics: "patoaventuras"
+     post_ids: [33, 34, 35]
+  }
+]
+```
 
 ## Traversing relationships in a recursive way
 
