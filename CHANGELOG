@@ -1,0 +1,7 @@
+* 1.0.0
+
+- First working version
+- Pluck simple attributes
+- Pluck Globalized attributes
+- Pluck relationships
+- Rails 3.2, 4.X and 5.0 support
