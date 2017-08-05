@@ -20,3 +20,9 @@ appraise "activerecord-5-0" do
   gem "globalize", github: 'globalize/globalize'
   gem "minitest-matchers_vaccine"
 end
+
+appraise "activerecord-5-1" do
+  gem "activerecord", "= 5.1.3"
+  gem "globalize", github: 'globalize/globalize'
+  gem "minitest-matchers_vaccine"
+end
