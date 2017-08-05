@@ -8,6 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = Pluckers::VERSION
   spec.authors       = ["David J. Brenes"]
   spec.email         = ["gems@simplelogica.net"]
+  spec.license       = 'GPL-3.0'
 
   spec.summary       = %q{Gem extending the idea behind AR's pluck method so we can fetch data from multiple tables}
   spec.description   = %q{Gem extending the idea behind AR's pluck method so we can fetch data from multiple tables}
@@ -21,7 +22,7 @@ Gem::Specification.new do |spec|
     raise "RubyGems 2.0 or newer is required to protect against public gem pushes."
   end
 
-  spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
+  spec.files         = `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(bin|gemfiles|test)/}) }
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
