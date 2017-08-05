@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    pluckers (1.0.0)
+    pluckers (1.0.1)
       activerecord (> 3.2, < 5.2)
 
 GEM
