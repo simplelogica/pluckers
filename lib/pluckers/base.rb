@@ -8,6 +8,8 @@ elsif active_record_version > Gem::Version.new("4.0") && active_record_version <
   require_relative 'features/active_record_4_0'
 elsif active_record_version > Gem::Version.new("5.0") && active_record_version < Gem::Version.new("5.1")
   require_relative 'features/active_record_5_0'
+elsif active_record_version > Gem::Version.new("5.1") && active_record_version < Gem::Version.new("5.2")
+  require_relative 'features/active_record_5_1'
 elsif active_record_version > Gem::Version.new("3.2") && active_record_version < Gem::Version.new("4.0")
   require_relative 'features/active_record_3_2'
 else
