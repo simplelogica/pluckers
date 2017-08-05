@@ -8,6 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = Pluckers::VERSION
   spec.authors       = ["David J. Brenes"]
   spec.email         = ["gems@simplelogica.net"]
+  spec.license       = 'GPL-3.0'
 
   spec.summary       = %q{Gem extending the idea behind AR's pluck method so we can fetch data from multiple tables}
   spec.description   = %q{Gem extending the idea behind AR's pluck method so we can fetch data from multiple tables}
