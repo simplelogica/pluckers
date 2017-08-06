@@ -247,7 +247,7 @@ class BelongsToTest < test_base_class
 
   end
 
-  def test_it_feteches_the_polymorphic_inverse_relationship
+  def test_it_feteches_the_polymorphic_has_many_inverse_relationship
     @subject = Pluckers::Base.new(Author.send(all_method), attributes: [:id], reflections: {
         subject_blog_posts: { }
       }
@@ -268,6 +268,30 @@ class BelongsToTest < test_base_class
             subject_id: p.subject_id,
             subject_type: p.subject_type
           }
+        }
+      }
+    }
+  end
+
+  def test_it_feteches_the_polymorphic_has_one_inverse_relationship
+    @subject = Pluckers::Base.new(Category.send(all_method), attributes: [:id], reflections: {
+        main_subject_blog_post: { }
+      }
+    )
+
+    must pluck Proc.new {|a|
+      {
+        id: a.id,
+        main_subject_blog_post: a.main_subject_blog_post.nil? ? nil : {
+          id: a.main_subject_blog_post.id,
+          title: a.main_subject_blog_post.title,
+          text: a.main_subject_blog_post.text,
+          author_id: a.main_subject_blog_post.author_id,
+          editor_id: a.main_subject_blog_post.editor_id,
+          reviewed_by_id: a.main_subject_blog_post.reviewed_by_id,
+          main_category_title: a.main_subject_blog_post.main_category_title,
+          subject_id: a.main_subject_blog_post.subject_id,
+          subject_type: a.main_subject_blog_post.subject_type
         }
       }
     }
