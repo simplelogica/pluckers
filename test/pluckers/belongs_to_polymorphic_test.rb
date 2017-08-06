@@ -145,7 +145,7 @@ class BelongsToTest < test_base_class
   def test_it_applies_scopes_for_the_configured_model
     @subject = Pluckers::Base.new(BlogPost.send(all_method), attributes: [:id], reflections: {
       subject: {
-        :Author => { scope: Author.none },
+        :Author => { scope: Author.no_results },
         :Category => { }
       }
     })

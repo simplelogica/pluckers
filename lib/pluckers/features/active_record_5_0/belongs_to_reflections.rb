@@ -5,7 +5,8 @@ module Pluckers
     module BelongsToReflections
 
       def active_record_belongs_to_reflection? reflection
-        reflection.is_a?(ActiveRecord::Reflection::BelongsToReflection)
+        reflection.is_a?(ActiveRecord::Reflection::BelongsToReflection) &&
+          !reflection.options[:polymorphic]
       end
 
       include Pluckers::Features::Base::BelongsToReflections
