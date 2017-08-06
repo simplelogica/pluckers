@@ -10,5 +10,9 @@ end
 class Author < ActiveRecord::Base
   has_many :blog_posts
   has_many :references, through: :blog_posts
+  has_many :subject_blog_posts, class_name: "BlogPost", as: :subject
   has_one :user
+
+  scope :no_results, ->() { where(false) }
+
 end

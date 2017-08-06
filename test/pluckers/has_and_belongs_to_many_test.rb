@@ -67,6 +67,8 @@ class HasAndBelongsToManyTest < test_base_class
         editor_id: p.editor_id,
         reviewed_by_id: p.reviewed_by_id,
         main_category_title: p.main_category_title,
+        subject_id: p.subject_id,
+        subject_type: p.subject_type,
         category_ids: p.category_ids,
         categories: p.categories.map {|c|
           {
@@ -92,6 +94,8 @@ class HasAndBelongsToManyTest < test_base_class
         editor_id: p.editor_id,
         reviewed_by_id: p.reviewed_by_id,
         main_category_title: p.main_category_title,
+        subject_id: p.subject_id,
+        subject_type: p.subject_type,
         category_ids: p.category_ids,
         categories: p.categories.map {|c|
           {
@@ -116,6 +120,8 @@ class HasAndBelongsToManyTest < test_base_class
         editor_id: p.editor_id,
         reviewed_by_id: p.reviewed_by_id,
         main_category_title: p.main_category_title,
+        subject_id: p.subject_id,
+        subject_type: p.subject_type,
         category_ids: p.category_ids
       }
     }
@@ -134,6 +140,8 @@ class HasAndBelongsToManyTest < test_base_class
         editor_id: p.editor_id,
         reviewed_by_id: p.reviewed_by_id,
         main_category_title: p.main_category_title,
+        subject_id: p.subject_id,
+        subject_type: p.subject_type,
         category_ids: p.category_ids,
         tags: p.categories.map {|c|
           {
@@ -158,6 +166,8 @@ class HasAndBelongsToManyTest < test_base_class
         editor_id: p.editor_id,
         reviewed_by_id: p.reviewed_by_id,
         main_category_title: p.main_category_title,
+        subject_id: p.subject_id,
+        subject_type: p.subject_type,
         c_ids: p.category_ids
       }
     }
@@ -176,6 +186,8 @@ class HasAndBelongsToManyTest < test_base_class
         editor_id: p.editor_id,
         reviewed_by_id: p.reviewed_by_id,
         main_category_title: p.main_category_title,
+        subject_id: p.subject_id,
+        subject_type: p.subject_type,
         c_ids: p.category_ids,
         tags: p.categories.map {|c|
           {

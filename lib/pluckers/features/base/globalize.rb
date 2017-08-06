@@ -70,8 +70,8 @@ module Pluckers
 
             fallbacks.each do |locale|
               @records = @records.joins(
-                "LEFT OUTER JOIN #{translation_table_name} AS locale_#{locale}_translation ON (
-                  #{@records.klass.table_name}.id = locale_#{locale}_translation.#{translation_foreign_key} AND
+                "LEFT OUTER JOIN #{@records.klass.connection.quote_table_name translation_table_name} AS locale_#{locale}_translation ON (
+                  #{@records.klass.connection.quote_table_name @records.klass.table_name}.id = locale_#{locale}_translation.#{translation_foreign_key} AND
                   locale_#{locale}_translation.locale = '#{locale}'
                 )")
 
@@ -93,8 +93,8 @@ module Pluckers
               # We add the locales that are not fallback
               unless fallbacks.include? locale
                 @records = @records.joins(
-                  "LEFT OUTER JOIN #{translation_table_name} AS locale_#{locale}_translation ON (
-                    #{@records.klass.table_name}.id = locale_#{locale}_translation.#{translation_foreign_key} AND
+                  "LEFT OUTER JOIN #{@records.klass.connection.quote_table_name translation_table_name} AS locale_#{locale}_translation ON (
+                    #{@records.klass.connection.quote_table_name @records.klass.table_name}.id = locale_#{locale}_translation.#{translation_foreign_key} AND
                     locale_#{locale}_translation.locale = '#{locale}'
                   )")
               end

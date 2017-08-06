@@ -157,6 +157,7 @@ module Pluckers
     prepend Features::Globalize
     prepend Features::SimpleAttributes
     prepend Features::BelongsToReflections
+    prepend Features::BelongsToPolymorphicReflections
     prepend Features::HasManyReflections
     prepend Features::HasManyThroughReflections
     prepend Features::HasAndBelongsToManyReflections

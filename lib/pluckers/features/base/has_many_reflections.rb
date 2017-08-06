@@ -102,6 +102,11 @@ module Pluckers
             # key as we will need it to relate the records
             reflection[:attributes] |= [klass_reflection.foreign_key.to_sym] if reflection[:attributes]
 
+            # If the has_many is an :as relationship (inverse of a polymorphic
+            # one) we should filter the ones with the right class
+            if klass_reflection.options[:as]
+              scope = scope.where(klass_reflection.type => klass_reflection.active_record.class_name)
+            end
 
             # And now we create the plucker. Notice that we add a where to the
             # scope, so we filter the records to pluck as we only get those with

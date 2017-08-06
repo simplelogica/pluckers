@@ -50,6 +50,45 @@ Each element in the reflections options has a key and a hash of options. The key
 
 This means that we can do everything in this "secondary" plucker. We can get globalize columns, we can rename... and we can also get another related models, giving us the ability to obtain a whole tree of models and objects in just one single point, with the minimum database queries required.
 
+## Polymorphic relationships
+
+Polymorphic belongs_to has always been a headache and a source of N+1 queries given you can perform any join or includes operations.
+
+With pluckers you can configure how each model must be plucked, being able to pluck different information that will allow you to perform different login, with the minimum number of queries.
+
+```ruby
+Pluckers::Base.new(BlogPost.all, {
+  attributes: [:name],
+  reflections: {
+    subject: {
+      :Author => { attributes: [:name] }
+      :Category => { attributes: [:title] }
+    }
+  }
+}).pluck
+```
+```ruby
+[
+  {
+    id: 1, name: "Lorem Ipsum", subject_id: 1, subject_type: "Author", subject: { id: 1, name: "someone" }
+  },
+  {
+    id: 2, name: "Lorem Ipsum 2", subject_id: 2, subject_type: "Author", subject: { id: 2, name: "another one" }
+  },
+  {
+    id: 3, name: "Lorem Ipsum 3", subject_id: 1, subject_type: "Category", subject: { id: 1, title: "gifs" }
+  },
+  {
+    id: 4, name: "Lorem Ipsum 4", subject_id: 2, subject_type: "Category", subject: { id: 1, name: "shiba gifs" }
+  },
+  {
+    id: 5, name: "Lorem Ipsum 5", subject_id: 1, subject_type: "BlogPost", subject: nil
+  }
+]
+```
+
+The options for each model are standard plucker options, so you can perform the exact same operations you are about to see. This means you can filter the polymorphic relationship with a scope and, more importantly, you can do this in a recursive way.
+
 ## Foreign keys and minimum data plucked
 
 Although in the examples we only show ids involved, relationships configured with different foreign keys can be fetched too as the configuration is read by the plucker to use the proper columns in both involved tables.

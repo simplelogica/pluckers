@@ -41,7 +41,7 @@ module Pluckers
 
           simple_attributes = plucker_attributes & klass_attributes
 
-          @attributes_to_pluck += simple_attributes.map {|f| { name: f, sql: "\"#{@records.table_name}\".#{f}" }}
+          @attributes_to_pluck += simple_attributes.map {|f| { name: f, sql: "#{@records.klass.connection.quote_table_name @records.table_name}.#{f}" }}
 
         end
 

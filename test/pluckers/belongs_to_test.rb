@@ -92,6 +92,8 @@ class BelongsToTest < test_base_class
         editor_id: p.editor_id,
         reviewed_by_id: p.reviewed_by_id,
         main_category_title: p.main_category_title,
+        subject_id: p.subject_id,
+        subject_type: p.subject_type,
         author: p.author.nil? ? nil : {
           id: p.author.id,
           name: p.author.name,
@@ -114,6 +116,8 @@ class BelongsToTest < test_base_class
         editor_id: p.editor_id,
         reviewed_by_id: p.reviewed_by_id,
         main_category_title: p.main_category_title,
+        subject_id: p.subject_id,
+        subject_type: p.subject_type,
         editor: p.editor.nil? ? nil : {
           id: p.editor.id,
           name: p.editor.name,
@@ -136,6 +140,8 @@ class BelongsToTest < test_base_class
         editor_id: p.editor_id,
         reviewed_by_id: p.reviewed_by_id,
         main_category_title: p.main_category_title,
+        subject_id: p.subject_id,
+        subject_type: p.subject_type,
         reviewer: p.reviewer.nil? ? nil : {
           id: p.reviewer.id,
           name: p.reviewer.name,
@@ -158,6 +164,8 @@ class BelongsToTest < test_base_class
         editor_id: p.editor_id,
         reviewed_by_id: p.reviewed_by_id,
         main_category_title: p.main_category_title,
+        subject_id: p.subject_id,
+        subject_type: p.subject_type,
         main_category: p.main_category.nil? ? nil : {
           id: p.main_category.id,
           title: p.main_category.title,
@@ -180,6 +188,8 @@ class BelongsToTest < test_base_class
         editor_id: p.editor_id,
         reviewed_by_id: p.reviewed_by_id,
         main_category_title: p.main_category_title,
+        subject_id: p.subject_id,
+        subject_type: p.subject_type,
         author: p.author.nil? ? nil : {
           id: p.author.id,
           name: p.author.name
@@ -201,6 +211,8 @@ class BelongsToTest < test_base_class
         editor_id: p.editor_id,
         reviewed_by_id: p.reviewed_by_id,
         main_category_title: p.main_category_title,
+        subject_id: p.subject_id,
+        subject_type: p.subject_type,
         post_author: p.author.nil? ? nil : {
           id: p.author.id,
           name: p.author.name
