@@ -1,10 +1,7 @@
-* EDGE
+* 1.1.0
 
-<<<<<<< HEAD
 - Pluck polymorphic relationships
-=======
 - FIX: using AR to quote table names instead of using \"
->>>>>>> fixes/quote-table
 
 * 1.0.1
 
