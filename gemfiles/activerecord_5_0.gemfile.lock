@@ -10,7 +10,7 @@ GIT
 PATH
   remote: ../
   specs:
-    pluckers (1.0.1)
+    pluckers (1.1.0)
       activerecord (> 3.2, < 5.2)
 
 GEM
