@@ -247,5 +247,31 @@ class BelongsToTest < test_base_class
 
   end
 
+  def test_it_feteches_the_polymorphic_inverse_relationship
+    @subject = Pluckers::Base.new(Author.send(all_method), attributes: [:id], reflections: {
+        subject_blog_posts: { }
+      }
+    )
+
+    must pluck Proc.new {|a|
+      {
+        id: a.id,
+        subject_blog_posts: a.subject_blog_posts.map {|p|
+          {
+            id: p.id,
+            title: p.title,
+            text: p.text,
+            author_id: p.author_id,
+            editor_id: p.editor_id,
+            reviewed_by_id: p.reviewed_by_id,
+            main_category_title: p.main_category_title,
+            subject_id: p.subject_id,
+            subject_type: p.subject_type
+          }
+        }
+      }
+    }
+  end
+
 
 end
