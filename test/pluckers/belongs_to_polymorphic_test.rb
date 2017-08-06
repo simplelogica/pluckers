@@ -76,17 +76,38 @@ class BelongsToTest < test_base_class
   end
 
   def test_it_fetches_all_simple_attributes
-    @subject = Pluckers::Base.new(BlogPost.send(all_method), fields: [:id], reflections: { subject: {} })
+    @subject = Pluckers::Base.new(BlogPost.send(all_method), attributes: [:id], reflections: {
+      subject: {
+        :Author => { },
+        :Category => { }
+      }
+    })
 
     must pluck Proc.new {|p|
-      {
+      expected = {
         id: p.id,
-        subject: p.subject.nil? ? nil : {
-          id: p.subject.id,
-          name: p.subject.name,
-          email: p.subject.email
-        }
+        subject_id: p.subject_id,
+        subject_type: p.subject_type
       }
+
+      expected[:subject] = case p.subject
+        when Author
+          {
+            id: p.subject.id,
+            name: p.subject.name,
+            email: p.subject.email
+          }
+        when Category
+          {
+            id: p.subject.id,
+            title: p.subject.title,
+            image: p.subject.image
+          }
+        else
+          nil
+        end
+
+      expected
     }
 
   end
