@@ -112,4 +112,102 @@ class BelongsToTest < test_base_class
 
   end
 
+  def test_it_ignores_non_cofigured_models
+    @subject = Pluckers::Base.new(BlogPost.send(all_method), attributes: [:id], reflections: {
+      subject: {
+        :Author => { }
+      }
+    })
+
+    must pluck Proc.new {|p|
+      expected = {
+        id: p.id,
+        subject_id: p.subject_id,
+        subject_type: p.subject_type
+      }
+
+      expected[:subject] = case p.subject
+        when Author
+          {
+            id: p.subject.id,
+            name: p.subject.name,
+            email: p.subject.email
+          }
+        else
+          nil
+        end
+
+      expected
+    }
+
+  end
+
+  def test_it_applies_scopes_for_the_configured_model
+    @subject = Pluckers::Base.new(BlogPost.send(all_method), attributes: [:id], reflections: {
+      subject: {
+        :Author => { scope: Author.none },
+        :Category => { }
+      }
+    })
+
+    must pluck Proc.new {|p|
+      expected = {
+        id: p.id,
+        subject_id: p.subject_id,
+        subject_type: p.subject_type
+      }
+
+      expected[:subject] = case p.subject
+        when Category
+          {
+            id: p.subject.id,
+            title: p.subject.title,
+            image: p.subject.image
+          }
+        else
+          nil
+        end
+
+      expected
+    }
+
+  end
+
+    def test_it_fetches_the_required_attributes
+    @subject = Pluckers::Base.new(BlogPost.send(all_method), attributes: [:id], reflections: {
+      subject: {
+        :Author => { attributes: [ :name ] },
+        :Category => { }
+      }
+    })
+
+    must pluck Proc.new {|p|
+      expected = {
+        id: p.id,
+        subject_id: p.subject_id,
+        subject_type: p.subject_type
+      }
+
+      expected[:subject] = case p.subject
+        when Author
+          {
+            id: p.subject.id,
+            name: p.subject.name,
+          }
+        when Category
+          {
+            id: p.subject.id,
+            title: p.subject.title,
+            image: p.subject.image
+          }
+        else
+          nil
+        end
+
+      expected
+    }
+
+  end
+
+
 end
