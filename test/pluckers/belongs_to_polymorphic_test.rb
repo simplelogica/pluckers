@@ -173,7 +173,7 @@ class BelongsToTest < test_base_class
 
   end
 
-    def test_it_fetches_the_required_attributes
+  def test_it_fetches_the_required_attributes
     @subject = Pluckers::Base.new(BlogPost.send(all_method), attributes: [:id], reflections: {
       subject: {
         :Author => { attributes: [ :name ] },
@@ -193,6 +193,44 @@ class BelongsToTest < test_base_class
           {
             id: p.subject.id,
             name: p.subject.name,
+          }
+        when Category
+          {
+            id: p.subject.id,
+            title: p.subject.title,
+            image: p.subject.image
+          }
+        else
+          nil
+        end
+
+      expected
+    }
+
+  end
+
+  def test_it_renames_belongs_to_polymorphic_reflections
+    @subject = Pluckers::Base.new(BlogPost.send(all_method), attributes: [:id], reflections: {
+        subject: {
+          :Author => { },
+          :Category => { }
+        }
+      }, renames: { subject: :post_subject }
+    )
+
+    must pluck Proc.new {|p|
+      expected = {
+        id: p.id,
+        subject_id: p.subject_id,
+        subject_type: p.subject_type
+      }
+
+      expected[:post_subject] = case p.subject
+        when Author
+          {
+            id: p.subject.id,
+            name: p.subject.name,
+            email: p.subject.email
           }
         when Category
           {
