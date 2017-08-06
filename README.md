@@ -27,7 +27,7 @@ In this section you will learn
 * [How to use a plucker and what do you obtain from it](./doc/usage/basics.md)
 * [How to use your plucker with your globalized methods](./doc/usage/globalize.md)
 * [How to rename your fetched attributes](./doc/usage/renaming.md)
-* [How to use your plucker for traversing through relationships in a recursive way and obtain data from several tables without N+1 and with the minimum queries](./doc/usage/relationships.md)
+* [How to use your plucker for traversing through relationships (even polymorphic ones!) in a recursive way and obtain data from several tables without N+1 and with the minimum queries](./doc/usage/relationships.md)
 * [How to create your own plucker classes to encapsulate all your plucking options and logic](./doc/usage/extending.md)
 
 ## Development

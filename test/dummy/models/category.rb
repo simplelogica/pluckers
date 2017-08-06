@@ -15,4 +15,5 @@ end
 
 class Category < ActiveRecord::Base
   has_and_belongs_to_many :blog_posts
+  has_one :main_subject_blog_post, class_name: "BlogPost", as: :subject
 end
