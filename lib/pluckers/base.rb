@@ -90,7 +90,6 @@ module Pluckers
     # This method performs all the sql and hash building according to the
     # received configuration.
     def pluck
-      return [] if @records.blank?
 
       configure_query
 
