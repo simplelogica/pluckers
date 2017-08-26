@@ -147,7 +147,7 @@ module Pluckers
         attributes_to_return = Hash[names_to_pluck.zip(record)]
 
         # Now we store it in the results hash
-        @results[attributes_to_return[:id]] = attributes_to_return
+        @results[attributes_to_return[ @query_to_pluck.primary_key.to_sym]] = attributes_to_return
       end
     end
 
