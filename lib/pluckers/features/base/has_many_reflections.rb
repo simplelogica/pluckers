@@ -120,21 +120,19 @@ module Pluckers
               ),
               reflection
 
+            hashed_results = {}
             # We initialize so we return an empty array if there are no record
             # related
             @results.each do |_, result|
               result[name] ||= []
+              hashed_results[result[klass_reflection.active_record_primary_key.to_sym]] = result
             end
 
             reflection_plucker.pluck.each do |r|
-              @results.each do |_,result|
                 # For each related result (Author) we search those records
                 # (BlogPost) that are related (author.id == post.author_id) and
                 # insert them in the relationship attributes
-                if result[klass_reflection.active_record_primary_key.to_sym] == r[klass_reflection.foreign_key.to_sym]
-                  result[name] << r
-                end
-              end
+                hashed_results[r[klass_reflection.foreign_key.to_sym]][name] << r
             end
 
           end

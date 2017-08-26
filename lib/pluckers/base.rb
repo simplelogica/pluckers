@@ -134,7 +134,7 @@ module Pluckers
 
 
       # And perform the real ActiveRecord pluck.
-      pluck_records(sql_to_pluck).each_with_index do |record, index|
+      pluck_records(sql_to_pluck).each do |record|
         # After the pluck we have to create the hash for each record.
 
         # If there's only a field we will not receive an array. But we need it
