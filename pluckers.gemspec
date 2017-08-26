@@ -35,4 +35,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "globalize"
   spec.add_development_dependency "byebug"
   spec.add_development_dependency "appraisal", "~> 2.1.0"
+  spec.add_development_dependency 'benchmark-ips', '~> 2.2.0'
+  spec.add_development_dependency 'ruby-prof'
 end
