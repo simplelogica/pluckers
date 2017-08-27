@@ -10,16 +10,17 @@ module Benchmark
     def run(label = nil, version: active_record_version, time:, disable_gc: true, warmup: 3, &block)
       #::ActiveRecord::Base.logger = Logger.new(STDOUT)
 
-      #RubyProf.start
+      profiling = false
+
+      RubyProf.start if profiling
 
       Benchmark::Runner.run(label, version: version, time: time, disable_gc: disable_gc, warmup: warmup, &block)
 
-      #result = RubyProf.stop
-
-      # print a flat profile to text
-      #printer = RubyProf::GraphHtmlPrinter.new(result)
-      #printer.print(File.new("result-#{label.gsub('/', '-')}-#{version}.html", 'w'))
-
+      if profiling
+        result = RubyProf.stop
+        printer = RubyProf::GraphHtmlPrinter.new(result)
+        printer.print(File.new("result-#{label.gsub('/', '-')}-#{version}.html", 'w'))
+      end
     end
 
   end
